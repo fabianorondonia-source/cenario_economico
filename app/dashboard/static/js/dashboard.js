@@ -292,7 +292,7 @@ function renderTelecomTabelas() {
   const faixa = (dados.telecom_setor.telecom_faixa_multiplos && dados.telecom_setor.telecom_faixa_multiplos.historico[0]) || null;
   if (faixa) {
     const item = document.createElement('li');
-    item.innerHTML = `<strong>Faixa de referência 2026:</strong> ${fmtNum(faixa.ev_ebitda_min,1)}x–${fmtNum(faixa.ev_ebitda_max,1)}x EBITDA · R$ ${fmtNum(faixa.valor_assinante_min,0)}–${fmtNum(faixa.valor_assinante_max,0)}/assinante (${esc(faixa.fonte)})`;
+    item.innerHTML = `<strong>Faixa de referência 2026:</strong> ${fmtNum(faixa.ev_ebitda_min,1)}x–${fmtNum(faixa.ev_ebitda_max,1)}x EBITDA · R$ ${fmtNum(faixa.valor_assinante_min,0)}–${fmtNum(faixa.valor_assinante_max,0)}/assinante — ${esc(faixa.fonte)}`;
     document.getElementById('lista-riscos').appendChild(item);
   }
 
