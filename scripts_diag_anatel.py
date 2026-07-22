@@ -67,6 +67,21 @@ candidatos = [
 for nome in candidatos:
     tentar(f"https://www.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/{nome}")
 
+log("=== Achado no inventario: dataset real é 'dados-de-acessos-de-comunicacao-multimidia' ===")
+log("=== Testando API CKAN do dados.gov.br com o slug certo ===")
+pkg = tentar("https://dados.gov.br/api/3/action/package_show?id=dados-de-acessos-de-comunicacao-multimidia")
+if pkg:
+    for enc in ("utf-8", "latin-1"):
+        try:
+            log(pkg.decode(enc)[:4000])
+            break
+        except UnicodeDecodeError:
+            continue
+
+log("=== Testando subdominio informacoes.anatel.gov.br (onde o painel realmente mora) ===")
+for nome in ["Total.csv", "Municipio.csv", "UF.csv", "Empresa.csv", "Grupo.csv"]:
+    tentar(f"https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/{nome}")
+
 with open("debug_anatel.log", "w", encoding="utf-8") as f:
     f.write("\n".join(LOG))
 
