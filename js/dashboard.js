@@ -1,10 +1,23 @@
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+// Paleta alinhada ao style.css (mesmos tons usados nas variáveis --accent,
+// --verde, --amarelo, --vermelho, --texto, --texto-sec).
+const COR = {
+  accent: '#7c6cf0',
+  accent2: '#a99bff',
+  accentSoft: 'rgba(124,108,240,0.18)',
+  verde: '#22c55e',
+  amarelo: '#f2b544',
+  vermelho: '#ef4a63',
+  texto: '#eef0f5',
+  textoSec: '#8791a8',
+};
+
 const PLOTLY_DARK = {
   paper_bgcolor: 'rgba(0,0,0,0)',
   plot_bgcolor: 'rgba(0,0,0,0)',
-  font: { color: '#e8e6f0', size: 11 },
-  margin: { t: 30, l: 40, r: 20, b: 30 },
+  font: { color: COR.texto, size: 11, family: '-apple-system, "Segoe UI", Roboto, sans-serif' },
+  margin: { t: 34, l: 44, r: 20, b: 34 },
 };
 const PLOTLY_CONFIG = { displayModeBar: false, responsive: true };
 const TEM_PLOTLY = typeof Plotly !== 'undefined';
@@ -65,7 +78,7 @@ function relogio() {
   document.getElementById('relogio').textContent = new Date().toLocaleString('pt-BR');
 }
 
-// ===== Ticker =====
+// ===== Faixa de mercado (chips estáticos, sem marquee) =====
 function renderTicker() {
   if (!dados) return;
   const itens = [];
@@ -74,7 +87,7 @@ function renderTicker() {
     const v = prefixo + fmtNum(item.valor, casas);
     const varr = item.variacao_dia;
     const seta = varr == null ? '' : (varr >= 0 ? `<span class="up">▲${fmtNum(Math.abs(varr),2)}%</span>` : `<span class="down">▼${fmtNum(Math.abs(varr),2)}%</span>`);
-    itens.push(`${label} ${v} ${seta}`);
+    itens.push(`<span class="ticker-item"><span class="lbl">${label}</span><span class="val">${v}</span>${seta}</span>`);
   };
   add('USD/BRL', dados.mercado.dolar_ptax, 4, 'R$ ');
   add('EUR/BRL', dados.mercado.euro_ptax, 4, 'R$ ');
@@ -195,29 +208,29 @@ function renderGauge(elId, valor, titulo, cor) {
   }
   const data = [{
     type: 'indicator', mode: 'gauge+number', value: valor,
-    number: { font: { color: '#fff', size: 34 } },
+    number: { font: { color: '#fff', size: 36 }, suffix: '' },
     gauge: {
-      axis: { range: [0, 100], tickcolor: '#8a8a9a', tickfont: { size: 9 } },
-      bar: { color: cor },
+      axis: { range: [0, 100], tickcolor: COR.textoSec, tickfont: { size: 9, color: COR.textoSec } },
+      bar: { color: cor, thickness: .82 },
       bgcolor: 'rgba(0,0,0,0)',
       borderwidth: 0,
       steps: [
-        { range: [0, 35], color: '#2a1218' },
-        { range: [35, 55], color: '#2a2412' },
-        { range: [55, 75], color: '#122a1e' },
-        { range: [75, 100], color: '#0e3322' },
+        { range: [0, 35], color: 'rgba(239,74,99,0.14)' },
+        { range: [35, 55], color: 'rgba(242,181,68,0.12)' },
+        { range: [55, 75], color: 'rgba(124,108,240,0.12)' },
+        { range: [75, 100], color: 'rgba(34,197,94,0.14)' },
       ],
     },
   }];
-  plotlySeguro(elId, data, { ...PLOTLY_DARK, height: 160 }, PLOTLY_CONFIG);
+  plotlySeguro(elId, data, { ...PLOTLY_DARK, height: 170 }, PLOTLY_CONFIG);
 }
 
 function renderScores() {
   const inv = dados.scores.momento_investimento;
   const ma = dados.scores.ma_score;
-  renderGauge('gauge-investimento', inv.score, 'Momento de Investimento', '#9B57E9');
+  renderGauge('gauge-investimento', inv.score, 'Momento de Investimento', COR.accent);
   document.getElementById('nivel-investimento').textContent = inv.nivel || '—';
-  renderGauge('gauge-ma', ma.score, 'M&A Score', '#29d391');
+  renderGauge('gauge-ma', ma.score, 'M&A Score', COR.verde);
   document.getElementById('nivel-ma').textContent = `${ma.emoji || ''} ${ma.nivel || '—'}`;
 }
 
@@ -268,36 +281,43 @@ function serieHistorico(item) {
   return { x: h.map(p => p.data), y: h.map(p => p.valor) };
 }
 
+// Título padrão de gráfico Plotly, consistente com o resto do painel
+// (maiúsculas, letter-spacing, cor secundária) em vez do estilo padrão do Plotly.
+function tituloChart(txt) {
+  return { text: txt.toUpperCase(), font: { size: 10.5, color: COR.textoSec }, x: 0, xanchor: 'left' };
+}
+const EIXO = { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.05)', zerolinecolor: 'rgba(255,255,255,0.08)' };
+
 function renderChartsEconomia() {
   const e = dados.economia;
   const labels = ['Selic', 'IPCA 12m', 'Desemprego', 'Produção Ind.', 'Varejo'];
   const valores = [e.selic_meta, e.ipca_12m, e.desemprego, e.producao_industrial, e.vendas_varejo].map(x => (x && x.valor) || 0);
   plotlySeguro('chart-radar-economia', [{
     type: 'scatterpolar', r: valores, theta: labels, fill: 'toself',
-    line: { color: '#9B57E9' }, fillcolor: 'rgba(155,87,233,0.3)'
-  }], { ...PLOTLY_DARK, polar: { bgcolor: 'rgba(0,0,0,0)', radialaxis: { color: '#8a8a9a' }, angularaxis: { color: '#e8e6f0' } }, showlegend: false, title: 'Radar macro' }, PLOTLY_CONFIG);
+    line: { color: COR.accent }, fillcolor: COR.accentSoft
+  }], { ...PLOTLY_DARK, polar: { bgcolor: 'rgba(0,0,0,0)', radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)' }, angularaxis: { color: COR.texto } }, showlegend: false, title: tituloChart('Radar macro') }, PLOTLY_CONFIG);
 
   const s = serieHistorico(e.ipca_mensal);
-  plotlySeguro('chart-linha-inflacao', [{ x: s.x, y: s.y, type: 'scatter', mode: 'lines', line: { color: '#e8c547' } }],
-    { ...PLOTLY_DARK, title: 'IPCA mensal (%)', xaxis: { color: '#8a8a9a' }, yaxis: { color: '#8a8a9a' } }, PLOTLY_CONFIG);
+  plotlySeguro('chart-linha-inflacao', [{ x: s.x, y: s.y, type: 'scatter', mode: 'lines', line: { color: COR.amarelo, width: 2 } }],
+    { ...PLOTLY_DARK, title: tituloChart('IPCA mensal (%)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
 }
 
 function renderChartsMercado() {
   const m = dados.mercado;
   const sd = serieHistorico(m.dolar_ptax);
-  plotlySeguro('chart-linha-dolar', [{ x: sd.x, y: sd.y, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: '#9B57E9' }, fillcolor: 'rgba(155,87,233,0.15)' }],
-    { ...PLOTLY_DARK, title: 'Dólar (USD/BRL)', xaxis: { color: '#8a8a9a' }, yaxis: { color: '#8a8a9a' } }, PLOTLY_CONFIG);
+  plotlySeguro('chart-linha-dolar', [{ x: sd.x, y: sd.y, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: COR.accent, width: 2 }, fillcolor: COR.accentSoft }],
+    { ...PLOTLY_DARK, title: tituloChart('Dólar (USD/BRL)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
 
   const si = serieHistorico(m.ibovespa);
-  plotlySeguro('chart-linha-ibov', [{ x: si.x, y: si.y, type: 'scatter', mode: 'lines', line: { color: '#29d391' } }],
-    { ...PLOTLY_DARK, title: 'Ibovespa', xaxis: { color: '#8a8a9a' }, yaxis: { color: '#8a8a9a' } }, PLOTLY_CONFIG);
+  plotlySeguro('chart-linha-ibov', [{ x: si.x, y: si.y, type: 'scatter', mode: 'lines', line: { color: COR.verde, width: 2 } }],
+    { ...PLOTLY_DARK, title: tituloChart('Ibovespa'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
 
   const chaves = ['dolar_ptax', 'euro_ptax', 'ibovespa', 'sp500', 'nasdaq', 'dow_jones', 'ouro', 'petroleo', 'vix'];
   const variacoes = chaves.map(k => (m[k] && m[k].variacao_dia) || 0);
   plotlySeguro('chart-heatmap-mercado', [{
     z: [variacoes], x: chaves.map(k => k.replace('_', ' ')), y: ['variação (%)'],
-    type: 'heatmap', colorscale: [[0, '#ef4b5f'], [0.5, '#15151f'], [1, '#29d391']], zmid: 0, showscale: false
-  }], { ...PLOTLY_DARK, title: 'Variação do dia (%)', xaxis: { color: '#8a8a9a' } }, PLOTLY_CONFIG);
+    type: 'heatmap', colorscale: [[0, COR.vermelho], [0.5, '#14161e'], [1, COR.verde]], zmid: 0, showscale: false
+  }], { ...PLOTLY_DARK, title: tituloChart('Variação do dia (%)'), xaxis: EIXO }, PLOTLY_CONFIG);
 }
 
 function renderChartsTelecom() {
@@ -307,24 +327,25 @@ function renderChartsTelecom() {
   const valores = grupos.map(g => (g.valor && g.valor > 0) ? g.valor : 10);
   plotlySeguro('chart-treemap-grupos', [{
     type: 'treemap', labels: ['Setor', ...labels], parents: ['', ...parents], values: [0, ...valores],
-    marker: { colorscale: 'Purples' }, textfont: { color: '#fff' }
-  }], { ...PLOTLY_DARK, title: 'Grandes grupos (tamanho ilustrativo)' }, PLOTLY_CONFIG);
+    marker: { colors: ['rgba(0,0,0,0)', ...labels.map((_, i) => `rgba(124,108,240,${0.35 + (i % 4) * 0.14})`)] },
+    textfont: { color: '#fff', size: 11 }
+  }], { ...PLOTLY_DARK, title: tituloChart('Grandes grupos (tamanho ilustrativo)') }, PLOTLY_CONFIG);
 
   const t = dados.telecom_setor;
   if (t.multiplo_ev_ebitda_atual) {
     plotlySeguro('chart-barra-multiplo', [{
       x: ['2021', 'Hoje'], y: [t.multiplo_ev_ebitda_2021.valor, t.multiplo_ev_ebitda_atual.valor],
-      type: 'bar', marker: { color: ['#5a3a80', '#9B57E9'] }
-    }], { ...PLOTLY_DARK, title: 'Múltiplo EV/EBITDA (x)', xaxis: { color: '#8a8a9a' }, yaxis: { color: '#8a8a9a' } }, PLOTLY_CONFIG);
+      type: 'bar', marker: { color: ['rgba(124,108,240,0.35)', COR.accent] }, width: [.5, .5]
+    }], { ...PLOTLY_DARK, title: tituloChart('Múltiplo EV/EBITDA (x)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
   }
 }
 
 function renderChartHistoricoScores() {
   const h = dados.historico_scores || [];
   plotlySeguro('chart-historico-scores', [
-    { x: h.map(p => p.data), y: h.map(p => p.momento_investimento), type: 'scatter', mode: 'lines+markers', name: 'Momento de Investimento', line: { color: '#9B57E9' } },
-    { x: h.map(p => p.data), y: h.map(p => p.ma_score), type: 'scatter', mode: 'lines+markers', name: 'M&A Score', line: { color: '#29d391' } },
-  ], { ...PLOTLY_DARK, title: '', legend: { font: { color: '#e8e6f0' } }, xaxis: { color: '#8a8a9a' }, yaxis: { color: '#8a8a9a', range: [0, 100] } }, PLOTLY_CONFIG);
+    { x: h.map(p => p.data), y: h.map(p => p.momento_investimento), type: 'scatter', mode: 'lines+markers', name: 'Momento de Investimento', line: { color: COR.accent, width: 2 }, marker: { size: 5 } },
+    { x: h.map(p => p.data), y: h.map(p => p.ma_score), type: 'scatter', mode: 'lines+markers', name: 'M&A Score', line: { color: COR.verde, width: 2 }, marker: { size: 5 } },
+  ], { ...PLOTLY_DARK, legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.15 }, xaxis: EIXO, yaxis: { ...EIXO, range: [0, 100] } }, PLOTLY_CONFIG);
 }
 
 function render() {

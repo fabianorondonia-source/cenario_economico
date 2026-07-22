@@ -2,11 +2,15 @@
 Camada de persistência (SQLite) do Economic Intelligence Dashboard.
 
 Guarda:
-  - cache_indicadores: último valor bom conhecido de cada indicador (para a
-    dashboard nunca ficar "em branco" se uma API gratuita cair).
-  - historico_scores: série histórica dos scores que NÓS calculamos
-    (Momento de Investimento, M&A Score) — não existe fonte externa pra isso.
-  - alertas_log: registro de quando cada alerta de threshold ligou/desligou.
+  - cache_indicadores (SQLite, local/efêmero): último valor bom conhecido de
+    cada indicador, para a dashboard nunca ficar "em branco" se uma API
+    gratuita cair no meio da atualização.
+  - historico_scores.json (arquivo versionado no git): série histórica dos
+    scores que NÓS calculamos (Momento de Investimento, M&A Score) — não
+    existe fonte externa pra isso, e precisa sobreviver entre execuções
+    efêmeras do GitHub Actions (por isso não fica só no SQLite).
+  - alertas_log (SQLite, local/efêmero): registro de quando cada alerta de
+    threshold ligou/desligou.
 """
 
 import json
@@ -18,6 +22,11 @@ from datetime import datetime, timezone
 DB_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(DB_DIR, "dashboard.db")
 SCHEMA_PATH = os.path.join(DB_DIR, "schema.sql")
+# Histórico de scores em JSON (não em SQLite): esse arquivo É versionado no
+# git — precisa sobreviver entre execuções efêmeras do GitHub Actions (o
+# runner não guarda o dashboard.db de um dia pro outro, mas o repositório sim).
+HISTORICO_JSON_PATH = os.path.join(DB_DIR, "historico_scores.json")
+HISTORICO_MAX_DIAS = 180
 
 # Esta pasta vive dentro de uma pasta sincronizada por iCloud/Obsidian. SQLite
 # usa locks de arquivo que podem colidir com o processo de sincronização —
@@ -135,23 +144,39 @@ def get_todos_indicadores():
     return out
 
 
+def _carregar_historico_json():
+    if not os.path.exists(HISTORICO_JSON_PATH):
+        return []
+    try:
+        with open(HISTORICO_JSON_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def _salvar_historico_json(historico):
+    with open(HISTORICO_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(historico, f, ensure_ascii=False, indent=2)
+
+
 def insert_score_snapshot(momento_investimento, ma_score):
-    conn = get_conn()
-    conn.execute(
-        "INSERT INTO historico_scores (data, momento_investimento, ma_score, criado_em) VALUES (?, ?, ?, ?)",
-        (datetime.now().strftime("%Y-%m-%d"), momento_investimento, ma_score, _agora())
-    )
-    conn.commit()
-    conn.close()
+    """Grava o snapshot do dia em historico_scores.json (versionado no git,
+    sobrevive entre execuções do GitHub Actions). Um snapshot por dia —
+    rodar de novo no mesmo dia substitui o valor do dia, não duplica."""
+    hoje = datetime.now().strftime("%Y-%m-%d")
+    historico = [h for h in _carregar_historico_json() if h.get("data") != hoje]
+    historico.append({
+        "data": hoje,
+        "momento_investimento": momento_investimento,
+        "ma_score": ma_score,
+        "criado_em": _agora(),
+    })
+    historico.sort(key=lambda h: h["data"])
+    _salvar_historico_json(historico[-HISTORICO_MAX_DIAS:])
 
 
 def get_score_history(limite=90):
-    conn = get_conn()
-    rows = conn.execute(
-        "SELECT * FROM historico_scores ORDER BY id DESC LIMIT ?", (limite,)
-    ).fetchall()
-    conn.close()
-    return [dict(r) for r in reversed(rows)]
+    return _carregar_historico_json()[-limite:]
 
 
 def registrar_alerta(chave, mensagem, nivel="atencao"):

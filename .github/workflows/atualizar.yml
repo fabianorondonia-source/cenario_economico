@@ -1,0 +1,43 @@
+name: Atualizar painel
+
+# Roda direto na infraestrutura do GitHub — não depende do Mac do Fabiano
+# estar ligado, nem de internet local. Busca os dados reais (Banco Central,
+# stooq.com, CoinGecko) e republica o snapshot (index.html) sozinho.
+
+on:
+  schedule:
+    - cron: "0 10 * * *"   # 10:00 UTC = 07:00 no horário de Brasília (UTC-3, sem horário de verão)
+  workflow_dispatch: {}     # permite rodar manualmente pela aba "Actions" do GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Buscar dados atuais e gerar snapshot
+        run: python3 export_estatico.py
+
+      - name: Publicar alterações
+        run: |
+          git config user.name "netway-bot"
+          git config user.email "actions@github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "Nada novo para publicar hoje."
+          else
+            git commit -m "Atualização automática (GitHub Actions) — $(date -u '+%d/%m/%Y %H:%M UTC')"
+            git push
+          fi

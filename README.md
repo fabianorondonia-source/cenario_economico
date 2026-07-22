@@ -91,13 +91,35 @@ atualização automática só funciona rodando localmente via
 `start.command`/`start.sh`. Rode `Publicar_no_GitHub.command` sempre
 que quiser atualizar o snapshot público (por exemplo, antes de uma reunião).
 
-## Atualização automática diária (sem precisar abrir nada)
+## Atualização automática diária
+
+Há **duas** camadas de automação — pode usar as duas juntas, elas não
+conflitam (a segunda commitada sempre vence a mais antiga):
+
+### 1. GitHub Actions (recomendado — roda sozinho, mesmo com o Mac desligado)
+
+`.github/workflows/atualizar.yml` roda todo dia às **7h (horário de
+Brasília)** direto na infraestrutura do GitHub: baixa o repositório, instala
+as dependências, roda `export_estatico.py` (que busca os dados reais na
+internet — Banco Central, stooq.com, CoinGecko) e publica o snapshot
+atualizado sozinho, sem depender do Mac do Fabiano estar ligado, de internet
+local, ou de nenhum script rodar na máquina. Também dá pra disparar na hora
+pela aba **Actions** do repositório no GitHub (botão "Run workflow"), sem
+precisar esperar o dia seguinte.
+
+### 2. launchd no Mac (opcional — mantém o painel local também sincronizado)
 
 Duplo clique **uma única vez** em `Instalar_Atualizacao_Automatica.command`.
 Isso liga um agendamento (launchd) que todo dia às 7h roda
 `atualizar_e_publicar.sh` sozinho: atualiza todos os indicadores automáticos
 e republica o snapshot no GitHub — sem você precisar abrir `start.command`
-nem `Publicar_no_GitHub.command`. Para desativar: `launchctl unload ~/Library/LaunchAgents/com.netway.economicintelligencedashboard.plist`.
+nem `Publicar_no_GitHub.command`. Útil porque também atualiza o
+`database/dashboard.db` local (cache usado pelo painel rodando via
+`start.command`). Para desativar: `launchctl unload ~/Library/LaunchAgents/com.netway.economicintelligencedashboard.plist`.
+
+O histórico dos scores (`database/historico_scores.json`) é versionado no
+git — por isso sobrevive tanto às execuções efêmeras do GitHub Actions
+quanto a reinstalações do projeto.
 
 ## Adicionando um novo indicador
 
