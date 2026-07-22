@@ -1,0 +1,103 @@
+:root {
+  --bg: #0a0a12;
+  --bg-elevado: #12121e;
+  --card: #15151f;
+  --borda: #23232f;
+  --roxo-vivo: #9B57E9;
+  --roxo-claro: #c9a3f5;
+  --texto: #e8e6f0;
+  --texto-sec: #8a8a9a;
+  --verde: #29d391;
+  --amarelo: #e8c547;
+  --laranja: #e97132;
+  --vermelho: #ef4b5f;
+  --mono: "SF Mono", "Roboto Mono", "Consolas", monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--texto);
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+/* Ticker */
+.ticker-bar { background: #05050a; border-bottom: 1px solid var(--borda); overflow: hidden; white-space: nowrap; height: 30px; }
+.ticker-track { display: inline-block; padding-left: 100%; animation: rolar 40s linear infinite; font-family: var(--mono); font-size: .78rem; line-height: 30px; color: var(--roxo-claro); }
+@keyframes rolar { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+.ticker-track span.up { color: var(--verde); }
+.ticker-track span.down { color: var(--vermelho); }
+
+/* Topbar */
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px; background: var(--bg-elevado); border-bottom: 1px solid var(--borda); flex-wrap: wrap; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 16px; }
+.brand img { height: 38px; }
+.titulo { font-size: .95rem; letter-spacing: 2px; font-weight: 700; color: #fff; }
+.subtitulo { font-size: .72rem; color: var(--texto-sec); letter-spacing: .5px; }
+.topbar-right { display: flex; align-items: center; gap: 18px; font-size: .78rem; color: var(--texto-sec); }
+.relogio { font-family: var(--mono); color: var(--roxo-claro); }
+.btn-atualizar { background: var(--roxo-vivo); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: .78rem; font-weight: 600; cursor: pointer; }
+.btn-atualizar:hover { background: #8342d6; }
+.btn-atualizar:disabled { opacity: .5; cursor: wait; }
+
+/* Alertas */
+.alertas-banner { background: linear-gradient(90deg, #3a0f18, #2a0a12); border-bottom: 1px solid var(--vermelho); padding: 10px 28px; font-size: .82rem; color: #ffb3bd; display: flex; gap: 22px; flex-wrap: wrap; }
+
+main.grid-principal { max-width: 1440px; margin: 0 auto; padding: 24px 28px 60px; }
+
+/* Scores row */
+.scores-row { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 16px; margin-bottom: 30px; }
+.score-card, .insights-card { background: var(--card); border: 1px solid var(--borda); border-radius: 12px; padding: 16px 18px; }
+.score-titulo { font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-sec); margin-bottom: 6px; }
+.score-nivel { text-align: center; font-weight: 700; font-size: 1rem; margin-top: -10px; color: var(--roxo-claro); }
+.gauge { height: 160px; }
+.lista-insights { list-style: none; font-size: .84rem; line-height: 1.5; max-height: 200px; overflow-y: auto; }
+.lista-insights li { padding: 8px 0; border-bottom: 1px solid var(--borda); }
+.lista-insights li:last-child { border-bottom: none; }
+.lista-insights li.risco { color: #ffb3bd; }
+.lista-insights li.oportunidade { color: #9ef0c9; }
+.lista-insights li.contexto { color: var(--texto); }
+
+/* Seções */
+.secao { margin-bottom: 34px; }
+.secao h2 { font-size: .95rem; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; border-bottom: 1px solid var(--borda); padding-bottom: 8px; margin-bottom: 16px; }
+.secao h3 { font-size: .82rem; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-sec); margin-bottom: 10px; }
+
+/* KPIs */
+.kpis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi { background: var(--card); border: 1px solid var(--borda); border-left: 3px solid var(--roxo-vivo); border-radius: 8px; padding: 12px 14px; }
+.kpi.verde { border-left-color: var(--verde); }
+.kpi.amarelo { border-left-color: var(--amarelo); }
+.kpi.vermelho { border-left-color: var(--vermelho); }
+.kpi .t { font-size: .68rem; text-transform: uppercase; letter-spacing: .5px; color: var(--texto-sec); display: flex; justify-content: space-between; }
+.kpi .t .manual { font-size: .6rem; background: #241a34; color: var(--roxo-claro); padding: 1px 6px; border-radius: 999px; }
+.kpi .v { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px; }
+.kpi .v .un { font-size: .8rem; color: var(--texto-sec); font-weight: 400; }
+.kpi .var { font-size: .74rem; font-weight: 700; margin-left: 6px; }
+.kpi .var.up { color: var(--vermelho); }
+.kpi .var.down { color: var(--verde); }
+.kpi .fonte { font-size: .64rem; color: var(--texto-sec); margin-top: 6px; opacity: .8; }
+
+/* Charts */
+.charts-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+.chart-card { background: var(--card); border: 1px solid var(--borda); border-radius: 10px; padding: 10px; }
+.chart { width: 100%; height: 260px; }
+
+/* Tabelas */
+.tabela-card { background: var(--card); border: 1px solid var(--borda); border-radius: 10px; padding: 14px 16px; margin-top: 14px; }
+table.tabela { width: 100%; border-collapse: collapse; font-size: .8rem; }
+table.tabela th { text-align: left; color: var(--texto-sec); text-transform: uppercase; font-size: .68rem; letter-spacing: .5px; padding: 6px 10px; border-bottom: 1px solid var(--borda); }
+table.tabela td { padding: 8px 10px; border-bottom: 1px solid #1c1c28; vertical-align: top; }
+table.tabela .op { font-weight: 600; color: #fff; }
+table.tabela .fonte-cel { font-size: .68rem; color: var(--texto-sec); }
+
+.riscos-card { background: var(--card); border: 1px solid var(--borda); border-radius: 10px; padding: 14px 18px; margin-top: 14px; }
+.riscos-card ul { padding-left: 18px; font-size: .84rem; line-height: 1.6; }
+
+/* Rodapé */
+.rodape { background: var(--bg-elevado); border-top: 1px solid var(--borda); padding: 14px 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .72rem; color: var(--texto-sec); }
+.rodape .disclaimer { font-weight: 600; color: var(--roxo-claro); }
+
+@media (max-width: 860px) {
+  .scores-row { grid-template-columns: 1fr; }
+}

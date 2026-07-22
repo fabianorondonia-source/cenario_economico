@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netway · Economic Intelligence Dashboard</title>
+<script src="{{ url_for('static', filename='js/plotly.min.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div id="ticker-bar" class="ticker-bar"><div id="ticker-track" class="ticker-track">Carregando indicadores…</div></div>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="{{ url_for('static', filename='images/logo_netway.png') }}" alt="Netway">
+    <div class="titulos">
+      <div class="titulo">ECONOMIC INTELLIGENCE DASHBOARD</div>
+      <div class="subtitulo">Grupo Netway · Brasil, Mercado Financeiro &amp; Setor de Provedores</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span id="relogio" class="relogio">—</span>
+    <span class="intervalo">Atualização a cada <strong id="intervalo-min">{{ intervalo_minutos }}</strong> min</span>
+    <button id="btn-atualizar" class="btn-atualizar">Atualizar agora</button>
+  </div>
+</header>
+
+<div id="alertas-banner" class="alertas-banner" style="display:none"></div>
+
+<main class="grid-principal">
+
+  <section class="scores-row">
+    <div class="score-card" id="score-investimento">
+      <div class="score-titulo">Momento de Investimento</div>
+      <div id="gauge-investimento" class="gauge"></div>
+      <div class="score-nivel" id="nivel-investimento">—</div>
+    </div>
+    <div class="score-card" id="score-ma">
+      <div class="score-titulo">M&amp;A Score — Aquisição de Provedores</div>
+      <div id="gauge-ma" class="gauge"></div>
+      <div class="score-nivel" id="nivel-ma">—</div>
+    </div>
+    <div class="insights-card">
+      <div class="score-titulo">Leituras automáticas</div>
+      <ul id="lista-insights" class="lista-insights"><li>Carregando…</li></ul>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Economia Brasileira</h2>
+    <div id="kpis-economia" class="kpis-grid"></div>
+    <div class="charts-row">
+      <div class="chart-card"><div id="chart-radar-economia" class="chart"></div></div>
+      <div class="chart-card"><div id="chart-linha-inflacao" class="chart"></div></div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Mercado Financeiro</h2>
+    <div id="kpis-mercado" class="kpis-grid"></div>
+    <div class="charts-row">
+      <div class="chart-card"><div id="chart-linha-dolar" class="chart"></div></div>
+      <div class="chart-card"><div id="chart-linha-ibov" class="chart"></div></div>
+      <div class="chart-card"><div id="chart-heatmap-mercado" class="chart"></div></div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Crédito</h2>
+    <div id="kpis-credito" class="kpis-grid"></div>
+  </section>
+
+  <section class="secao">
+    <h2>Setor de Provedores (ISPs) &amp; M&amp;A</h2>
+    <div id="kpis-telecom" class="kpis-grid"></div>
+    <div class="charts-row">
+      <div class="chart-card"><div id="chart-treemap-grupos" class="chart"></div></div>
+      <div class="chart-card"><div id="chart-barra-multiplo" class="chart"></div></div>
+    </div>
+    <div class="tabela-card">
+      <h3>Grandes grupos</h3>
+      <table class="tabela" id="tabela-grupos"><thead><tr><th>Grupo</th><th>Tipo</th><th>Segmento</th><th>Mercado</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="tabela-card">
+      <h3>Movimentações recentes de M&amp;A</h3>
+      <table class="tabela" id="tabela-movs"><thead><tr><th>Período</th><th>Operação</th><th>Região</th><th>Observação</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="riscos-card">
+      <h3>Riscos regulatórios</h3>
+      <ul id="lista-riscos"></ul>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Histórico dos Scores</h2>
+    <div class="chart-card"><div id="chart-historico-scores" class="chart"></div></div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <span>Painel Netway — dados públicos (Banco Central, stooq.com, CoinGecko) + curadoria manual (marcada como "manual" em cada indicador).</span>
+  <span class="disclaimer">Não constitui recomendação de investimento, jurídica ou financeira.</span>
+</footer>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

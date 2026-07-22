@@ -1,0 +1,12 @@
+{
+  "porta": 8750,
+  "intervalo_atualizacao_minutos": 60,
+  "tema": "dark",
+  "alertas": {
+    "dolar_max": 6.00,
+    "selic_max": 15.0,
+    "cds_max": 300,
+    "queda_ibovespa_dia_pct": 5.0,
+    "alta_risco_pais_dia_pct": 15.0
+  }
+}

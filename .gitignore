@@ -1,0 +1,9 @@
+*.command
+.DS_Store
+__pycache__/
+*.pyc
+database/*.db
+logs/*.log
+config/settings.local.json
+.venv/
+venv/
