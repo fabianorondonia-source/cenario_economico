@@ -299,18 +299,53 @@ function tituloChart(txt) {
 }
 const EIXO = { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.05)', zerolinecolor: 'rgba(255,255,255,0.08)' };
 
+// Bandas de referência pra normalizar o radar macro. Selic (%), IPCA 12m
+// (%) e Desemprego (%) são grandezas pequenas (0-20); Produção Industrial e
+// Vendas no Varejo são ÍNDICES (base 100, variam 85-115) — plotar tudo no
+// mesmo eixo 0-100 fazia os três primeiros sumirem no centro do radar e os
+// dois últimos estourarem o raio. Cada eixo agora vira um "score" 0-100
+// relativo à sua própria banda plausível, só pra desenho — o valor real
+// (com unidade) aparece no hover.
+const BANDAS_RADAR = {
+  'Selic':         { min: 0,  max: 20,  valor: e => e.selic_meta,          unidade: '% a.a.' },
+  'IPCA 12m':      { min: -2, max: 12,  valor: e => e.ipca_12m,            unidade: '%' },
+  'Desemprego':    { min: 3,  max: 15,  valor: e => e.desemprego,          unidade: '%' },
+  'Produção Ind.': { min: 85, max: 115, valor: e => e.producao_industrial, unidade: 'índice' },
+  'Varejo':        { min: 85, max: 115, valor: e => e.vendas_varejo,       unidade: 'índice' },
+};
+
 function renderChartsEconomia() {
   const e = dados.economia;
-  const labels = ['Selic', 'IPCA 12m', 'Desemprego', 'Produção Ind.', 'Varejo'];
-  const brutos = [e.selic_meta, e.ipca_12m, e.desemprego, e.producao_industrial, e.vendas_varejo].map(x => x && x.valor);
+  const labels = Object.keys(BANDAS_RADAR);
+  const brutos = labels.map(l => { const b = BANDAS_RADAR[l].valor(e); return b && b.valor; });
   if (brutos.every(v => v === null || v === undefined)) {
     graficoVazio('chart-radar-economia', 'nenhum indicador macro foi buscado ainda com internet');
   } else {
-    const valores = brutos.map(v => v || 0);
+    const scores = labels.map((l, i) => {
+      const { min, max } = BANDAS_RADAR[l];
+      const v = brutos[i];
+      if (v === null || v === undefined) return 0;
+      return Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100));
+    });
+    const textoHover = labels.map((l, i) => {
+      const v = brutos[i];
+      const txt = v === null || v === undefined ? 'sem dado' : `${fmtNum(v, 1)} ${BANDAS_RADAR[l].unidade}`;
+      return `${l}: ${txt}`;
+    });
     plotlySeguro('chart-radar-economia', [{
-      type: 'scatterpolar', r: valores, theta: labels, fill: 'toself',
-      line: { color: COR.accent }, fillcolor: COR.accentSoft
-    }], { ...PLOTLY_DARK, polar: { bgcolor: 'rgba(0,0,0,0)', radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)' }, angularaxis: { color: COR.texto } }, showlegend: false, title: tituloChart('Radar macro') }, PLOTLY_CONFIG);
+      type: 'scatterpolar', r: scores, theta: labels, fill: 'toself',
+      line: { color: COR.accent }, fillcolor: COR.accentSoft,
+      text: textoHover, hovertemplate: '%{text}<extra></extra>',
+    }], {
+      ...PLOTLY_DARK,
+      polar: {
+        bgcolor: 'rgba(0,0,0,0)',
+        radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)', range: [0, 100], showticklabels: false },
+        angularaxis: { color: COR.texto },
+      },
+      showlegend: false,
+      title: tituloChart('Radar macro (posição relativa — passe o mouse pro valor real)'),
+    }, PLOTLY_CONFIG);
   }
 
   const s = serieHistorico(e.ipca_mensal);
@@ -340,29 +375,77 @@ function renderChartsMercado() {
       { ...PLOTLY_DARK, title: tituloChart('Ibovespa'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
   }
 
-  const chaves = ['dolar_ptax', 'euro_ptax', 'ibovespa', 'sp500', 'nasdaq', 'dow_jones', 'ouro', 'petroleo', 'vix'];
+  // Rótulos legíveis (a chave crua "dow_jones" virava um "dow jon-" cortado
+  // e girado 45° no eixo — trocado por um bar horizontal com nome completo
+  // e valor escrito, bem mais fácil de ler que a cor de uma célula de heatmap).
+  const NOMES_MERCADO = {
+    dolar_ptax: 'USD/BRL', euro_ptax: 'EUR/BRL', ibovespa: 'Ibovespa', sp500: 'S&P 500',
+    nasdaq: 'Nasdaq', dow_jones: 'Dow Jones', ouro: 'Ouro', petroleo: 'Petróleo (WTI)', vix: 'VIX',
+  };
+  const chaves = Object.keys(NOMES_MERCADO);
   const variacoesBrutas = chaves.map(k => m[k] && m[k].variacao_dia);
   if (variacoesBrutas.every(v => v === null || v === undefined)) {
     graficoVazio('chart-heatmap-mercado', 'nenhuma variação diária disponível ainda');
   } else {
-    const variacoes = variacoesBrutas.map(v => v || 0);
+    // Maior variação (em módulo) primeiro embaixo por causa da orientação
+    // horizontal do Plotly (desenha de baixo pra cima) — assim a barra mais
+    // extrema fica no topo visualmente.
+    const pares = chaves.map((k, i) => ({ k, v: variacoesBrutas[i] ?? 0 })).sort((a, b) => Math.abs(a.v) - Math.abs(b.v));
+    const nomes = pares.map(p => NOMES_MERCADO[p.k]);
+    const valores = pares.map(p => p.v);
+    const maxAbs = Math.max(...valores.map(v => Math.abs(v)), 0.5);
     plotlySeguro('chart-heatmap-mercado', [{
-      z: [variacoes], x: chaves.map(k => k.replace('_', ' ')), y: ['variação (%)'],
-      type: 'heatmap', colorscale: [[0, COR.vermelho], [0.5, '#14161e'], [1, COR.verde]], zmid: 0, showscale: false
-    }], { ...PLOTLY_DARK, title: tituloChart('Variação do dia (%)'), xaxis: { ...EIXO, type: 'category' } }, PLOTLY_CONFIG);
+      x: valores, y: nomes, type: 'bar', orientation: 'h',
+      marker: { color: valores.map(v => v >= 0 ? COR.verde : COR.vermelho) },
+      text: valores.map(v => (v >= 0 ? '▲ ' : '▼ ') + fmtNum(Math.abs(v), 2) + '%'),
+      textposition: 'outside', textfont: { color: COR.textoSec, size: 10.5 },
+      cliponaxis: false,
+    }], {
+      ...PLOTLY_DARK,
+      title: tituloChart('Variação do dia (%)'),
+      xaxis: { ...EIXO, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
+      yaxis: { ...EIXO, type: 'category', automargin: true },
+      margin: { t: 34, l: 90, r: 40, b: 34 },
+    }, PLOTLY_CONFIG);
   }
 }
 
 function renderChartsTelecom() {
+  // O treemap antigo usava o "valor" de cada grupo como tamanho — mas esse
+  // valor é a COTAÇÃO POR AÇÃO (R$/US$ por papel), não o tamanho da empresa,
+  // e pras de capital fechado nem existe (era preenchido com 10 só pra
+  // aparecer uma caixinha). Resultado: American Tower (ação ~US$163)
+  // engolia o quadro todo, sem dizer nada de real sobre porte relativo.
+  // Troca por um gráfico do que realmente é comparável entre os grupos de
+  // capital aberto: a variação do dia (%) da ação. Os de capital fechado
+  // continuam listados (com tipo/segmento) na tabela "Grandes grupos" logo
+  // abaixo — não têm dado de mercado público pra plotar, e está tudo bem
+  // não inventar um número só pra preencher espaço.
   const grupos = Object.values(dados.telecom_grupos || {});
-  const labels = grupos.map(g => (g.historico && g.historico[0] && g.historico[0].nome) || '?');
-  const parents = labels.map(() => 'Setor');
-  const valores = grupos.map(g => (g.valor && g.valor > 0) ? g.valor : 10);
-  plotlySeguro('chart-treemap-grupos', [{
-    type: 'treemap', labels: ['Setor', ...labels], parents: ['', ...parents], values: [0, ...valores],
-    marker: { colors: ['rgba(0,0,0,0)', ...labels.map((_, i) => `rgba(124,108,240,${0.35 + (i % 4) * 0.14})`)] },
-    textfont: { color: '#fff', size: 11 }
-  }], { ...PLOTLY_DARK, title: tituloChart('Grandes grupos (tamanho ilustrativo)') }, PLOTLY_CONFIG);
+  const abertos = grupos
+    .map(g => ({ nome: (g.historico && g.historico[0] && g.historico[0].nome) || '?', variacao: g.variacao_dia }))
+    .filter(g => g.variacao !== null && g.variacao !== undefined);
+  if (abertos.length === 0) {
+    graficoVazio('chart-treemap-grupos', 'nenhuma cotação dos grupos de capital aberto foi buscada ainda');
+  } else {
+    const ordenado = [...abertos].sort((a, b) => a.variacao - b.variacao);
+    const nomes = ordenado.map(g => g.nome);
+    const valores = ordenado.map(g => g.variacao);
+    const maxAbs = Math.max(...valores.map(v => Math.abs(v)), 0.5);
+    plotlySeguro('chart-treemap-grupos', [{
+      x: valores, y: nomes, type: 'bar', orientation: 'h',
+      marker: { color: valores.map(v => v >= 0 ? COR.verde : COR.vermelho) },
+      text: valores.map(v => (v >= 0 ? '▲ ' : '▼ ') + fmtNum(Math.abs(v), 2) + '%'),
+      textposition: 'outside', textfont: { color: COR.textoSec, size: 10.5 },
+      cliponaxis: false,
+    }], {
+      ...PLOTLY_DARK,
+      title: tituloChart('Ações do setor — variação do dia (%)'),
+      xaxis: { ...EIXO, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
+      yaxis: { ...EIXO, type: 'category', automargin: true },
+      margin: { t: 34, l: 110, r: 40, b: 34 },
+    }, PLOTLY_CONFIG);
+  }
 
   const t = dados.telecom_setor;
   if (t.multiplo_ev_ebitda_atual) {
