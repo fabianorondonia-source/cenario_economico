@@ -374,36 +374,48 @@ function renderChartsTelecom() {
 }
 
 // ===== Ranking de provedores (base de clientes) =====
-function renderChartRankingNacional() {
-  const item = (dados.telecom_ranking || {}).ranking_nacional;
+// Função genérica: serve tanto pro ranking nacional (campo acessos_mil, em
+// milhares) quanto pros estaduais (campo acessos, valor cheio) — só muda a
+// chave do campo numérico, o texto da unidade e o título.
+function renderChartRanking(elId, chave, campoValor, unidadeTxt, titulo) {
+  const item = (dados.telecom_ranking || {})[chave];
   const lista = (item && item.historico) || [];
   if (lista.length === 0) {
-    graficoVazio('chart-ranking-nacional', 'ranking nacional ainda não foi carregado');
+    graficoVazio(elId, 'ranking ainda não foi carregado');
     return;
   }
   // Já vem ordenado por base de clientes (maior primeiro); Plotly desenha
   // barras horizontais de baixo pra cima, então invertemos pra o 1º lugar
   // aparecer no topo.
-  const ordenado = [...lista].sort((a, b) => b.acessos_mil - a.acessos_mil).reverse();
+  const ordenado = [...lista].sort((a, b) => b[campoValor] - a[campoValor]).reverse();
   const nomes = ordenado.map(p => p.nome);
-  const valores = ordenado.map(p => p.acessos_mil);
+  const valores = ordenado.map(p => p[campoValor]);
   const cores = ordenado.map((_, i) => i === ordenado.length - 1 ? COR.accent : `rgba(124,108,240,${0.35 + (i / ordenado.length) * 0.4})`);
-  plotlySeguro('chart-ranking-nacional', [{
+  plotlySeguro(elId, [{
     x: valores, y: nomes, type: 'bar', orientation: 'h',
     marker: { color: cores },
-    text: valores.map(v => fmtNum(v, 0) + ' mil'), textposition: 'outside',
+    text: valores.map(v => fmtNum(v, 0) + (unidadeTxt ? ' ' + unidadeTxt : '')), textposition: 'outside',
     textfont: { color: COR.textoSec, size: 10.5 },
   }], {
     ...PLOTLY_DARK,
-    title: tituloChart('Top 10 provedores do Brasil — base de clientes (mil acessos)'),
-    xaxis: { ...EIXO, title: { text: 'mil acessos', font: { size: 10, color: COR.textoSec } } },
+    title: tituloChart(titulo),
+    xaxis: { ...EIXO, title: { text: unidadeTxt || 'acessos', font: { size: 10, color: COR.textoSec } } },
     // type:'category' precisa vir explícito — o Plotly (nesta versão) não
     // detectou sozinho que o eixo y de uma barra horizontal com nomes de
     // operadora era categórico, e desenhava um eixo numérico vazio (mesmo
     // bug de fundo que já tínhamos corrigido nos outros gráficos).
     yaxis: { ...EIXO, type: 'category', automargin: true },
-    margin: { t: 34, l: 140, r: 60, b: 34 },
+    margin: { t: 34, l: 140, r: 50, b: 34 },
   }, PLOTLY_CONFIG);
+}
+
+function renderChartRankingNacional() {
+  renderChartRanking('chart-ranking-nacional', 'ranking_nacional', 'acessos_mil', 'mil', 'Top 10 provedores do Brasil — base de clientes (mil acessos)');
+  renderChartRanking('chart-ranking-ro', 'ranking_ro', 'acessos', '', 'Top 10 — Rondônia (RO)');
+  renderChartRanking('chart-ranking-mt', 'ranking_mt', 'acessos', '', 'Top 10 — Mato Grosso (MT)');
+  renderChartRanking('chart-ranking-to', 'ranking_to', 'acessos', '', 'Top 10 — Tocantins (TO)');
+  renderChartRanking('chart-ranking-pa', 'ranking_pa', 'acessos', '', 'Top 10 — Pará (PA)');
+  renderChartRanking('chart-ranking-ms', 'ranking_ms', 'acessos', '', 'Top 10 — Mato Grosso do Sul (MS)');
 }
 
 function renderChartHistoricoScores() {
