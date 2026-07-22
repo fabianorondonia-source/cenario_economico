@@ -397,7 +397,11 @@ function renderChartRankingNacional() {
     ...PLOTLY_DARK,
     title: tituloChart('Top 10 provedores do Brasil — base de clientes (mil acessos)'),
     xaxis: { ...EIXO, title: { text: 'mil acessos', font: { size: 10, color: COR.textoSec } } },
-    yaxis: { ...EIXO, automargin: true },
+    // type:'category' precisa vir explícito — o Plotly (nesta versão) não
+    // detectou sozinho que o eixo y de uma barra horizontal com nomes de
+    // operadora era categórico, e desenhava um eixo numérico vazio (mesmo
+    // bug de fundo que já tínhamos corrigido nos outros gráficos).
+    yaxis: { ...EIXO, type: 'category', automargin: true },
     margin: { t: 34, l: 140, r: 60, b: 34 },
   }, PLOTLY_CONFIG);
 }
