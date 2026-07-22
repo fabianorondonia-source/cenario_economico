@@ -40,9 +40,10 @@ MOVIMENTACOES_RECENTES = [
 ]
 
 RISCOS_REGULATORIOS = [
-    "Tarifa antidumping pode elevar o preço da fibra óptica importada, pressionando o custo de expansão de rede.",
-    "Disputa Anatel x Aneel sobre compartilhamento de postes — Aneel aprovou proposta própria e devolveu o tema à Anatel.",
-    "Reavaliação do PGMC (Plano Geral de Metas de Competição) pela Anatel gera receio de retrocesso regulatório, segundo a associação Neo.",
+    "Fim da dispensa automática de outorga (Res. 777/2025, RGO art. 13): provedores que operavam sem outorga formal (até 5 mil assinantes) agora precisam regularizar a autorização junto à Anatel sob risco de multa/paralização — checar isso na due diligence de qualquer ISP-alvo de aquisição.",
+    "Novo PGMC (Plano Geral de Metas de Competição) enfraquece as ORPAs (Ofertas de Referência Pública de Atacado): Abrint e TelComp alertam para risco de concentração de mercado e cláusulas mais duras das grandes operadoras nas negociações de atacado com provedores regionais.",
+    "Compartilhamento de postes segue em disputa: Decreto 12.068/2024 em revisão pela Anatel desde dez/2025, e o PL 3.220/2019 (novo marco de preço/regras) tramitando — aprovado na CCJ do Senado em abr/2026, ainda em análise na Câmara.",
+    "Fiscalização mais dura sobre retenção de logs (Marco Civil da Internet): decisões recentes do STJ reforçam a obrigação de guardar IP + porta lógica + timestamp por 1 ano — provedor sem CGNAT/IPv6 auditado corre risco de responder por identificação que falhou.",
 ]
 
 
@@ -62,7 +63,8 @@ def atualizar_todos():
     )
     db.upsert_indicador(
         chave="telecom_riscos_regulatorios", categoria="telecom_setor", valor=None, unidade="lista",
-        fonte="IPNews", atualizacao="manual", historico=[{"risco": r} for r in RISCOS_REGULATORIOS]
+        fonte="Anatel/SCM Engenharia/Abrint/TelComp (atualizado 22/07/2026)", atualizacao="manual",
+        historico=[{"risco": r} for r in RISCOS_REGULATORIOS]
     )
     print("[telecom.sector] dados do setor de provedores carregados no cache.")
 
