@@ -11,11 +11,11 @@ independente — se uma falhar, as outras continuam normalmente.
 
 import sys
 import os
-import urllib.request
 import json
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
+from services._http import abrir_url, descrever_erro  # noqa: E402
 
 TIMEOUT = 10
 MAX_HISTORICO = 120
@@ -46,8 +46,7 @@ def log(msg):
 
 
 def _http_get_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Netway EID)"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+    with abrir_url(url, timeout=TIMEOUT) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
@@ -89,7 +88,7 @@ def atualizar_todos():
             )
             log(f"{chave}: {atual['valor']} ({atual['data']}) — OK")
         except Exception as e:
-            log(f"{chave}: falhou ({e}). Mantendo cache anterior.")
+            log(f"{chave}: falhou ({descrever_erro(e)}). Mantendo cache anterior.")
 
     # IPCA acumulado 12 meses (calculado, não é uma série SGS única)
     try:
@@ -102,7 +101,7 @@ def atualizar_todos():
             )
             log(f"ipca_12m: {r['valor']}% — OK")
     except Exception as e:
-        log(f"ipca_12m: falhou ({e}).")
+        log(f"ipca_12m: falhou ({descrever_erro(e)}).")
 
 
 if __name__ == "__main__":

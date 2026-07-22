@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "services
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
 from services.indicators.markets import _buscar_indice  # noqa: E402
+from services._http import descrever_erro  # noqa: E402
 
 GRUPOS = {
     "Brisanet":     {"tipo": "capital aberto (B3: BRIT3)", "simbolos_stooq": ["brit3.br", "brit3"], "segmento": "FTTH + 5G FWA — Nordeste"},
@@ -53,7 +54,7 @@ def atualizar_todos():
                     if anterior and anterior["valor"]:
                         variacao = round(((atual["valor"] - anterior["valor"]) / anterior["valor"]) * 100, 2)
             except Exception as e:
-                log(f"{nome}: falhou ao buscar cotação ({e}).")
+                log(f"{nome}: falhou ao buscar cotação ({descrever_erro(e)}).")
 
         db.upsert_indicador(
             chave=chave, categoria="telecom_grupos", valor=cotacao,

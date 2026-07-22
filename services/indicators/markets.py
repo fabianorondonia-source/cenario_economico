@@ -16,11 +16,11 @@ import csv
 import io
 import sys
 import os
-import urllib.request
 import json
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
+from services._http import abrir_url, descrever_erro  # noqa: E402
 
 TIMEOUT = 10
 MAX_HISTORICO = 120
@@ -43,8 +43,7 @@ def log(msg):
 
 def _stooq_csv(simbolo):
     url = f"https://stooq.com/q/d/l/?s={simbolo}&i=d"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Netway EID)"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+    with abrir_url(url, timeout=TIMEOUT) as resp:
         texto = resp.read().decode("utf-8")
     linhas = list(csv.DictReader(io.StringIO(texto)))
     if not linhas or "Date" not in (linhas[0] or {}):
@@ -59,13 +58,17 @@ def _stooq_csv(simbolo):
 
 
 def _buscar_indice(simbolos, n_dias=MAX_HISTORICO):
+    ultimo_erro = None
     for s in simbolos:
         try:
             historico = _stooq_csv(s)
             if historico:
                 return historico[-n_dias:]
-        except Exception:
+        except Exception as e:
+            ultimo_erro = e
             continue
+    if ultimo_erro:
+        log(f"nenhum símbolo respondeu ({simbolos}) — último erro: {descrever_erro(ultimo_erro)}")
     return []
 
 
@@ -88,14 +91,13 @@ def atualizar_indices_stooq():
             )
             log(f"{chave}: {atual['valor']} ({atual['data']}) — OK")
         except Exception as e:
-            log(f"{chave}: falhou ({e}). Mantendo cache anterior.")
+            log(f"{chave}: falhou ({descrever_erro(e)}). Mantendo cache anterior.")
 
 
 def atualizar_bitcoin():
     try:
         url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,brl&include_24hr_change=true"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Netway EID)"})
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        with abrir_url(url, timeout=TIMEOUT) as resp:
             payload = json.loads(resp.read().decode("utf-8"))
         btc = payload.get("bitcoin", {})
         if not btc:
@@ -112,7 +114,7 @@ def atualizar_bitcoin():
         )
         log(f"bitcoin: US$ {btc.get('usd')} — OK")
     except Exception as e:
-        log(f"bitcoin: falhou ({e}). Mantendo cache anterior.")
+        log(f"bitcoin: falhou ({descrever_erro(e)}). Mantendo cache anterior.")
 
 
 def atualizar_todos():
