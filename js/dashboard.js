@@ -34,7 +34,18 @@ function plotlySeguro(elId, data, layout, config) {
     Plotly.newPlot(elId, data, layout, config);
   } catch (e) {
     console.warn(`falha ao desenhar gráfico ${elId}`, e);
+    graficoVazio(elId, 'não foi possível desenhar este gráfico com os dados atuais');
   }
+}
+
+// Em vez de deixar o Plotly desenhar um grid vazio (0-4, -1-6) quando não
+// há pontos suficientes — o que fica parecendo erro/bug — mostra uma
+// mensagem clara. Isso acontece tipicamente quando o painel ainda não
+// rodou nenhuma atualização com internet real (ex.: logo após publicar).
+function graficoVazio(elId, msg) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;text-align:center;color:var(--texto-sec);font-size:.78rem;padding:0 20px;line-height:1.5">Sem dados suficientes ainda —<br>${esc(msg)}.</div>`;
 }
 
 function fmtNum(v, casas = 2) {
@@ -291,33 +302,55 @@ const EIXO = { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.05)', zerolin
 function renderChartsEconomia() {
   const e = dados.economia;
   const labels = ['Selic', 'IPCA 12m', 'Desemprego', 'Produção Ind.', 'Varejo'];
-  const valores = [e.selic_meta, e.ipca_12m, e.desemprego, e.producao_industrial, e.vendas_varejo].map(x => (x && x.valor) || 0);
-  plotlySeguro('chart-radar-economia', [{
-    type: 'scatterpolar', r: valores, theta: labels, fill: 'toself',
-    line: { color: COR.accent }, fillcolor: COR.accentSoft
-  }], { ...PLOTLY_DARK, polar: { bgcolor: 'rgba(0,0,0,0)', radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)' }, angularaxis: { color: COR.texto } }, showlegend: false, title: tituloChart('Radar macro') }, PLOTLY_CONFIG);
+  const brutos = [e.selic_meta, e.ipca_12m, e.desemprego, e.producao_industrial, e.vendas_varejo].map(x => x && x.valor);
+  if (brutos.every(v => v === null || v === undefined)) {
+    graficoVazio('chart-radar-economia', 'nenhum indicador macro foi buscado ainda com internet');
+  } else {
+    const valores = brutos.map(v => v || 0);
+    plotlySeguro('chart-radar-economia', [{
+      type: 'scatterpolar', r: valores, theta: labels, fill: 'toself',
+      line: { color: COR.accent }, fillcolor: COR.accentSoft
+    }], { ...PLOTLY_DARK, polar: { bgcolor: 'rgba(0,0,0,0)', radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)' }, angularaxis: { color: COR.texto } }, showlegend: false, title: tituloChart('Radar macro') }, PLOTLY_CONFIG);
+  }
 
   const s = serieHistorico(e.ipca_mensal);
-  plotlySeguro('chart-linha-inflacao', [{ x: s.x, y: s.y, type: 'scatter', mode: 'lines', line: { color: COR.amarelo, width: 2 } }],
-    { ...PLOTLY_DARK, title: tituloChart('IPCA mensal (%)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+  if (s.x.length === 0) {
+    graficoVazio('chart-linha-inflacao', 'série do IPCA ainda não foi buscada');
+  } else {
+    plotlySeguro('chart-linha-inflacao', [{ x: s.x, y: s.y, type: 'scatter', mode: 'lines', line: { color: COR.amarelo, width: 2 } }],
+      { ...PLOTLY_DARK, title: tituloChart('IPCA mensal (%)'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
+  }
 }
 
 function renderChartsMercado() {
   const m = dados.mercado;
   const sd = serieHistorico(m.dolar_ptax);
-  plotlySeguro('chart-linha-dolar', [{ x: sd.x, y: sd.y, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: COR.accent, width: 2 }, fillcolor: COR.accentSoft }],
-    { ...PLOTLY_DARK, title: tituloChart('Dólar (USD/BRL)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+  if (sd.x.length === 0) {
+    graficoVazio('chart-linha-dolar', 'cotação do dólar ainda não foi buscada');
+  } else {
+    plotlySeguro('chart-linha-dolar', [{ x: sd.x, y: sd.y, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: COR.accent, width: 2 }, fillcolor: COR.accentSoft }],
+      { ...PLOTLY_DARK, title: tituloChart('Dólar (USD/BRL)'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
+  }
 
   const si = serieHistorico(m.ibovespa);
-  plotlySeguro('chart-linha-ibov', [{ x: si.x, y: si.y, type: 'scatter', mode: 'lines', line: { color: COR.verde, width: 2 } }],
-    { ...PLOTLY_DARK, title: tituloChart('Ibovespa'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+  if (si.x.length === 0) {
+    graficoVazio('chart-linha-ibov', 'série do Ibovespa ainda não foi buscada');
+  } else {
+    plotlySeguro('chart-linha-ibov', [{ x: si.x, y: si.y, type: 'scatter', mode: 'lines', line: { color: COR.verde, width: 2 } }],
+      { ...PLOTLY_DARK, title: tituloChart('Ibovespa'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
+  }
 
   const chaves = ['dolar_ptax', 'euro_ptax', 'ibovespa', 'sp500', 'nasdaq', 'dow_jones', 'ouro', 'petroleo', 'vix'];
-  const variacoes = chaves.map(k => (m[k] && m[k].variacao_dia) || 0);
-  plotlySeguro('chart-heatmap-mercado', [{
-    z: [variacoes], x: chaves.map(k => k.replace('_', ' ')), y: ['variação (%)'],
-    type: 'heatmap', colorscale: [[0, COR.vermelho], [0.5, '#14161e'], [1, COR.verde]], zmid: 0, showscale: false
-  }], { ...PLOTLY_DARK, title: tituloChart('Variação do dia (%)'), xaxis: EIXO }, PLOTLY_CONFIG);
+  const variacoesBrutas = chaves.map(k => m[k] && m[k].variacao_dia);
+  if (variacoesBrutas.every(v => v === null || v === undefined)) {
+    graficoVazio('chart-heatmap-mercado', 'nenhuma variação diária disponível ainda');
+  } else {
+    const variacoes = variacoesBrutas.map(v => v || 0);
+    plotlySeguro('chart-heatmap-mercado', [{
+      z: [variacoes], x: chaves.map(k => k.replace('_', ' ')), y: ['variação (%)'],
+      type: 'heatmap', colorscale: [[0, COR.vermelho], [0.5, '#14161e'], [1, COR.verde]], zmid: 0, showscale: false
+    }], { ...PLOTLY_DARK, title: tituloChart('Variação do dia (%)'), xaxis: { ...EIXO, type: 'category' } }, PLOTLY_CONFIG);
+  }
 }
 
 function renderChartsTelecom() {
@@ -336,16 +369,23 @@ function renderChartsTelecom() {
     plotlySeguro('chart-barra-multiplo', [{
       x: ['2021', 'Hoje'], y: [t.multiplo_ev_ebitda_2021.valor, t.multiplo_ev_ebitda_atual.valor],
       type: 'bar', marker: { color: ['rgba(124,108,240,0.35)', COR.accent] }, width: [.5, .5]
-    }], { ...PLOTLY_DARK, title: tituloChart('Múltiplo EV/EBITDA (x)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+    }], { ...PLOTLY_DARK, title: tituloChart('Múltiplo EV/EBITDA (x)'), xaxis: { ...EIXO, type: 'category' }, yaxis: EIXO }, PLOTLY_CONFIG);
   }
 }
 
 function renderChartHistoricoScores() {
   const h = dados.historico_scores || [];
+  if (h.length < 2) {
+    // Com 0 ou 1 ponto o Plotly não tem como calcular um range de data
+    // sensato e desenha um eixo degenerado (ex.: milissegundos) — melhor
+    // mostrar uma mensagem clara do que esse eixo quebrado.
+    graficoVazio('chart-historico-scores', 'o histórico começa a aparecer a partir do 2º dia de atualização automática');
+    return;
+  }
   plotlySeguro('chart-historico-scores', [
     { x: h.map(p => p.data), y: h.map(p => p.momento_investimento), type: 'scatter', mode: 'lines+markers', name: 'Momento de Investimento', line: { color: COR.accent, width: 2 }, marker: { size: 5 } },
     { x: h.map(p => p.data), y: h.map(p => p.ma_score), type: 'scatter', mode: 'lines+markers', name: 'M&A Score', line: { color: COR.verde, width: 2 }, marker: { size: 5 } },
-  ], { ...PLOTLY_DARK, legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.15 }, xaxis: EIXO, yaxis: { ...EIXO, range: [0, 100] } }, PLOTLY_CONFIG);
+  ], { ...PLOTLY_DARK, legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.15 }, xaxis: { ...EIXO, type: 'category' }, yaxis: { ...EIXO, range: [0, 100] } }, PLOTLY_CONFIG);
 }
 
 function render() {
