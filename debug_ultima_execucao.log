@@ -14,21 +14,21 @@
 [bcb] taxa_media_credito: 33.42 (2026-05-01) — OK
 [bcb] inadimplencia: 4.74 (2026-05-01) — OK
 [bcb] ipca_12m: 4.64% — OK
-[markets] ibovespa: 173326.0 (2026-07-21) — OK
-[markets] sp500: 7509.2001953125 (2026-07-21) — OK
-[markets] nasdaq: 25837.2109375 (2026-07-21) — OK
-[markets] dow_jones: 52224.640625 (2026-07-21) — OK
-[markets] ouro: 4122.10009765625 (2026-07-22) — OK
-[markets] petroleo: 87.12999725341797 (2026-07-22) — OK
-[markets] vix: 17.43000030517578 (2026-07-22) — OK
-[markets] bitcoin: US$ 65610 — OK
+[markets] ibovespa: 175545.734375 (2026-07-22) — OK
+[markets] sp500: 7503.91015625 (2026-07-22) — OK
+[markets] nasdaq: 25735.611328125 (2026-07-22) — OK
+[markets] dow_jones: 52376.5 (2026-07-22) — OK
+[markets] ouro: 4148.60009765625 (2026-07-22) — OK
+[markets] petroleo: 86.66000366210938 (2026-07-22) — OK
+[markets] vix: 17.280000686645508 (2026-07-22) — OK
+[markets] bitcoin: US$ 65831 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.599999904632568
-[telecom.players] American Tower: cotação 163.38999938964844
-[telecom.players] IHS Holding: cotação 8.210000038146973
+[telecom.players] Unifique: cotação 5.699999809265137
+[telecom.players] American Tower: cotação 164.2899932861328
+[telecom.players] IHS Holding: cotação 8.25
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -39,5 +39,10 @@
 [telecom.players] Fibrasil: perfil curado (capital fechado)
 [telecom.players] Neutral Networks: perfil curado (capital fechado)
 [telecom.ranking] ranking nacional de provedores carregado no cache.
+[telecom.ranking] ranking de RO carregado no cache.
+[telecom.ranking] ranking de MT carregado no cache.
+[telecom.ranking] ranking de TO carregado no cache.
+[telecom.ranking] ranking de PA carregado no cache.
+[telecom.ranking] ranking de MS carregado no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 13:14 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 13:52 — index.html + css/ + js/ + images/ na raiz do projeto.
