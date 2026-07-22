@@ -82,6 +82,30 @@ log("=== Testando subdominio informacoes.anatel.gov.br (onde o painel realmente 
 for nome in ["Total.csv", "Municipio.csv", "UF.csv", "Empresa.csv", "Grupo.csv"]:
     tentar(f"https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/{nome}")
 
+log("=== Baixando a pagina HTML do dataset no dados.gov.br (procurando link cru) ===")
+pagina = tentar("https://dados.gov.br/dataset/dados-de-acessos-de-comunicacao-multimidia")
+if pagina:
+    for enc in ("utf-8", "latin-1"):
+        try:
+            texto_pagina = pagina.decode(enc)
+            break
+        except UnicodeDecodeError:
+            continue
+    else:
+        texto_pagina = pagina.decode("latin-1", errors="replace")
+    log(f"tamanho da pagina: {len(texto_pagina)} chars")
+    import re
+    links = re.findall(r'https?://[^\s"\'<>]+\.(?:csv|zip|xlsx|json)', texto_pagina, re.IGNORECASE)
+    log(f"links de arquivo encontrados no HTML: {links[:30]}")
+    # tambem procura por qualquer referencia a "resource" ou "download"
+    trechos = re.findall(r'.{60}(?:resource|download|distribuicao).{60}', texto_pagina, re.IGNORECASE)
+    for t in trechos[:15]:
+        log("trecho: " + t.replace("\n", " "))
+
+log("=== Tentando API CKAN sem parametro de auth em outro formato (dados.gov.br v2?) ===")
+tentar("https://dados.gov.br/dados/api/publico/conjuntos-dados/dados-de-acessos-de-comunicacao-multimidia")
+tentar("https://dados.gov.br/api/publico/conjuntos-dados/dados-de-acessos-de-comunicacao-multimidia")
+
 with open("debug_anatel.log", "w", encoding="utf-8") as f:
     f.write("\n".join(LOG))
 
