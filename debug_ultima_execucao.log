@@ -14,21 +14,23 @@
 [bcb] taxa_media_credito: 33.42 (2026-05-01) — OK
 [bcb] inadimplencia: 4.74 (2026-05-01) — OK
 [bcb] ipca_12m: 4.64% — OK
-[markets] ibovespa: 177241.03125 (2026-07-22) — OK
-[markets] sp500: 7508.1201171875 (2026-07-22) — OK
-[markets] nasdaq: 25747.333984375 (2026-07-22) — OK
-[markets] dow_jones: 52294.7109375 (2026-07-22) — OK
-[markets] ouro: 4148.39990234375 (2026-07-22) — OK
-[markets] petroleo: 86.87999725341797 (2026-07-22) — OK
-[markets] vix: 16.809999465942383 (2026-07-22) — OK
-[markets] bitcoin: US$ 66000 — OK
+[economy.agro] soja_saca: 144.17 R$/saca (60kg)
+[economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
+[markets] ibovespa: 177478.5625 (2026-07-22) — OK
+[markets] sp500: 7504.259765625 (2026-07-22) — OK
+[markets] nasdaq: 25730.69140625 (2026-07-22) — OK
+[markets] dow_jones: 52230.328125 (2026-07-22) — OK
+[markets] ouro: 4140.60009765625 (2026-07-22) — OK
+[markets] petroleo: 86.75 (2026-07-22) — OK
+[markets] vix: 16.959999084472656 (2026-07-22) — OK
+[markets] bitcoin: US$ 65838 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
 [telecom.players] Unifique: cotação 5.670000076293945
-[telecom.players] American Tower: cotação 166.2100067138672
-[telecom.players] IHS Holding: cotação 8.244999885559082
+[telecom.players] American Tower: cotação 165.6699981689453
+[telecom.players] IHS Holding: cotação 8.234999656677246
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -44,5 +46,7 @@
 [telecom.ranking] ranking de TO carregado no cache.
 [telecom.ranking] ranking de PA carregado no cache.
 [telecom.ranking] ranking de MS carregado no cache.
+[telecom.ranking] HHI de concentração por estado calculado.
+[telecom.ranking] ameaça Starlink por estado calculada.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 18:02 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 19:52 — index.html + css/ + js/ + images/ na raiz do projeto.

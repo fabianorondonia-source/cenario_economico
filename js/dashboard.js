@@ -280,10 +280,99 @@ function renderTelecomTabelas() {
       <td class="op">${esc(mv.operacao)}</td>
       <td>${esc(mv.regiao || '—')}</td>
       <td>${esc(mv.obs || '—')}<br><span class="fonte-cel">Fonte: ${esc(mv.fonte || '—')}</span></td>
-    </tr>`).join('') || '<tr><td colspan="4">Sem registros.</td></tr>';
+      <td>${esc(mv.valor_por_assinante || '—')}</td>
+    </tr>`).join('') || '<tr><td colspan="5">Sem registros.</td></tr>';
 
   const riscos = (dados.telecom_setor.telecom_riscos_regulatorios && dados.telecom_setor.telecom_riscos_regulatorios.historico) || [];
   document.getElementById('lista-riscos').innerHTML = riscos.map(r => `<li>${esc(r.risco)}</li>`).join('');
+
+  // Faixa de múltiplos 2026 (calculada por nós sobre negócios reais) — some
+  // essa informação junto do card de riscos regulatórios, como contexto de
+  // referência pra qualquer negociação da Netway.
+  const faixa = (dados.telecom_setor.telecom_faixa_multiplos && dados.telecom_setor.telecom_faixa_multiplos.historico[0]) || null;
+  if (faixa) {
+    const item = document.createElement('li');
+    item.innerHTML = `<strong>Faixa de referência 2026:</strong> ${fmtNum(faixa.ev_ebitda_min,1)}x–${fmtNum(faixa.ev_ebitda_max,1)}x EBITDA · R$ ${fmtNum(faixa.valor_assinante_min,0)}–${fmtNum(faixa.valor_assinante_max,0)}/assinante (${esc(faixa.fonte)})`;
+    document.getElementById('lista-riscos').appendChild(item);
+  }
+
+  // FUST — resumo estruturado (não é um valor único, é um card informativo).
+  const fust = (dados.telecom_setor.telecom_fust && dados.telecom_setor.telecom_fust.historico[0]) || null;
+  const fustEl = document.getElementById('conteudo-fust');
+  if (fustEl) {
+    if (!fust) {
+      fustEl.innerHTML = '<p class="nota-secao">Sem dados carregados ainda.</p>';
+    } else {
+      fustEl.innerHTML = `
+        <p><strong>2025:</strong> ${esc(fust.orcamento_2025_mobilizado)}</p>
+        <p><strong>2026 → 2027 (projetado):</strong> ${esc(fust.orcamento_2026)} → ${esc(fust.orcamento_2027_projetado)}</p>
+        <p><strong>Janela de decisão:</strong> ${esc(fust.janela_beneficio_fiscal)}</p>
+        <p><strong>Programa Regional (PL 3211/25):</strong> ${esc(fust.programa_regional)}</p>
+        <p class="fonte-cel">${esc(fust.situacao_atual)}</p>
+        <p class="fonte-cel">Fonte: ${esc(dados.telecom_setor.telecom_fust.fonte || '')}</p>
+      `;
+    }
+  }
+}
+
+// ===== Contexto regional (agro) =====
+function renderKpisAgro() {
+  const el = document.getElementById('kpis-agro');
+  if (!el) return;
+  const a = dados.agro_regional || {};
+  const kpiAgro = (titulo, item) => {
+    if (!item) return '';
+    const ctx = (item.historico && item.historico[0] && item.historico[0].contexto) || '';
+    return `
+      <div class="kpi">
+        <div class="t"><span>${esc(titulo)}</span>${tagManual(item)}</div>
+        <div class="v">${fmtNum(item.valor, 2)}<span class="un"> ${esc(item.unidade || '')}</span></div>
+        <div class="fonte">${esc(ctx)}</div>
+        <div class="fonte">${esc(item.fonte || '')}</div>
+      </div>`;
+  };
+  el.innerHTML = [
+    kpiAgro('Soja (saca 60kg)', a.soja_saca),
+    kpiAgro('Boi Gordo (arroba — MT)', a.boi_gordo_arroba_mt),
+  ].join('') || '<p class="nota-secao">Sem dados carregados ainda.</p>';
+}
+
+// ===== HHI de concentração + ameaça Starlink por estado =====
+function renderChartHHI() {
+  const item = dados.telecom_ranking && dados.telecom_ranking.hhi_estados;
+  const lista = (item && item.historico) || [];
+  if (lista.length === 0) {
+    graficoVazio('chart-hhi-estados', 'HHI ainda não foi calculado');
+  } else {
+    const ordenado = [...lista].sort((a, b) => a.hhi_top10 - b.hhi_top10);
+    const nomes = ordenado.map(p => p.uf);
+    const valores = ordenado.map(p => p.hhi_top10);
+    const cores = ordenado.map(p => p.nivel === 'alta concentração' ? COR.vermelho : p.nivel === 'concentração moderada' ? COR.amarelo : COR.verde);
+    plotlySeguro('chart-hhi-estados', [{
+      x: nomes, y: valores, type: 'bar',
+      marker: { color: cores },
+      text: ordenado.map(p => `${fmtNum(p.hhi_top10, 0)} (líder: ${p.lider}, ${fmtNum(p.lider_share, 1)}%)`),
+      textposition: 'outside', textfont: { color: COR.textoSec, size: 10 },
+      cliponaxis: false,
+    }], {
+      ...PLOTLY_DARK,
+      title: tituloChart('HHI de concentração — top 10 por estado'),
+      xaxis: { ...EIXO, type: 'category' },
+      yaxis: { ...EIXO, autorange: false, range: [0, Math.max(...valores) * 1.3] },
+      margin: { t: 34, l: 44, r: 20, b: 34 },
+    }, PLOTLY_CONFIG);
+  }
+
+  const starlinkItem = dados.telecom_ranking && dados.telecom_ranking.ameaca_starlink;
+  const starlinkLista = (starlinkItem && starlinkItem.historico) || [];
+  const corNivel = n => n === 'ameaça alta' ? 'down' : n === 'ameaça moderada' ? '' : 'up';
+  document.querySelector('#tabela-starlink tbody').innerHTML = starlinkLista.map(s => `
+    <tr>
+      <td class="op">${esc(s.uf)}</td>
+      <td>${s.presente ? '#' + s.posicao : '—'}</td>
+      <td>${s.presente ? fmtNum(s.market_share, 1) + '%' : '—'}</td>
+      <td><span class="var ${corNivel(s.nivel)}">${esc(s.nivel)}</span></td>
+    </tr>`).join('') || '<tr><td colspan="4">Sem dados.</td></tr>';
 }
 
 // ===== Gráficos Plotly =====
@@ -538,7 +627,8 @@ function render() {
   const passos = [
     renderTicker, renderKpis, renderScores, renderInsights, renderAlertas,
     renderTelecomTabelas, renderChartsEconomia, renderChartsMercado,
-    renderChartsTelecom, renderChartRankingNacional, renderChartHistoricoScores,
+    renderChartsTelecom, renderChartRankingNacional, renderChartHHI,
+    renderKpisAgro, renderChartHistoricoScores,
   ];
   for (const passo of passos) {
     try { passo(); } catch (e) { console.warn(`falha ao renderizar ${passo.name}`, e); }
