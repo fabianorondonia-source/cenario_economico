@@ -44,9 +44,14 @@ def log(msg):
 def _stooq_csv(simbolo):
     url = f"https://stooq.com/q/d/l/?s={simbolo}&i=d"
     with abrir_url(url, timeout=TIMEOUT) as resp:
-        texto = resp.read().decode("utf-8")
+        texto = resp.read().decode("utf-8", errors="replace")
     linhas = list(csv.DictReader(io.StringIO(texto)))
     if not linhas or "Date" not in (linhas[0] or {}):
+        # stooq às vezes devolve "Exceeded the daily hits limit" ou uma
+        # página de bloqueio em vez do CSV — loga um trecho pra facilitar
+        # diagnóstico em vez de só dizer "vazio".
+        amostra = texto.strip().replace("\n", " ")[:120]
+        log(f"{simbolo}: resposta não é CSV válido — trecho: {amostra!r}")
         return []
     out = []
     for row in linhas:
