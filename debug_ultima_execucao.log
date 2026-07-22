@@ -1,32 +1,49 @@
 [export_estatico] atualizando indicadores antes de exportar...
 [atualizar_tudo] iniciando ciclo de atualização...
-[bcb] selic_meta: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] ipca_mensal: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] igpm_mensal: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] dolar_ptax: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] euro_ptax: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] desemprego: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] divida_bruta_pib: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] resultado_primario: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] producao_industrial: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] vendas_varejo: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] spread_bancario: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] taxa_media_credito: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
-[bcb] inadimplencia: falhou (HTTPError: HTTP Error 400: Bad Request). Mantendo cache anterior.
+[bcb] selic_meta: 14.25 (2026-08-05) — OK
+[bcb] ipca_mensal: 0.16 (2026-06-01) — OK
+[bcb] igpm_mensal: -0.5 (2026-06-01) — OK
+[bcb] dolar_ptax: 5.078 (2026-07-21) — OK
+[bcb] euro_ptax: 5.793 (2026-07-21) — OK
+[bcb] desemprego: 5.6 (2026-05-01) — OK
+[bcb] divida_bruta_pib: 77.38 (2024-10-01) — OK
+[bcb] resultado_primario: 1.91 (2024-10-01) — OK
+[bcb] producao_industrial: 107.3 (2026-05-01) — OK
+[bcb] vendas_varejo: 108.94 (2026-05-01) — OK
+[bcb] spread_bancario: 22.09 (2026-05-01) — OK
+[bcb] taxa_media_credito: 33.42 (2026-05-01) — OK
+[bcb] inadimplencia: 4.74 (2026-05-01) — OK
 [bcb] ipca_12m: 4.64% — OK
+[markets] ^bvsp: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+[markets] bvsp: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] ibovespa: nenhum símbolo respondeu, mantendo cache anterior.
+[markets] ^spx: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] sp500: nenhum símbolo respondeu, mantendo cache anterior.
+[markets] ^ndq: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+[markets] ^ixic: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] nasdaq: nenhum símbolo respondeu, mantendo cache anterior.
+[markets] ^dji: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] dow_jones: nenhum símbolo respondeu, mantendo cache anterior.
+[markets] xauusd: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] ouro: nenhum símbolo respondeu, mantendo cache anterior.
+[markets] cl.f: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] petroleo: nenhum símbolo respondeu, mantendo cache anterior.
+[markets] ^vix: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [markets] vix: nenhum símbolo respondeu, mantendo cache anterior.
-[markets] bitcoin: US$ 66221 — OK
+[markets] bitcoin: US$ 66236 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
+[markets] brit3.br: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+[markets] brit3: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [telecom.players] Brisanet: perfil curado (capital fechado)
+[markets] fiqe3.br: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+[markets] fiqe3: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [telecom.players] Unifique: perfil curado (capital fechado)
+[markets] amt.us: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+[markets] amt: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [telecom.players] American Tower: perfil curado (capital fechado)
+[markets] ihs.us: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+[markets] ihs: resposta não é CSV válido — trecho: '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
 [telecom.players] IHS Holding: perfil curado (capital fechado)
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
@@ -38,4 +55,4 @@
 [telecom.players] Fibrasil: perfil curado (capital fechado)
 [telecom.players] Neutral Networks: perfil curado (capital fechado)
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 03:57 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 04:05 — index.html + css/ + js/ + images/ na raiz do projeto.
