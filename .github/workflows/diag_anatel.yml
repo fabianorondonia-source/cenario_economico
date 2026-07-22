@@ -1,0 +1,43 @@
+name: Diagnostico Anatel (temporario)
+
+# Workflow temporário só pra descobrir a URL real dos dados abertos da
+# Anatel (roda com internet de verdade do GitHub, ao contrário do sandbox
+# do Claude). Apagar este arquivo e scripts_diag_anatel.py depois de achar
+# a URL certa.
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "scripts_diag_anatel.py"
+      - ".github/workflows/diag_anatel.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  diagnosticar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install certifi
+
+      - name: Rodar diagnostico
+        run: python3 scripts_diag_anatel.py
+
+      - name: Publicar log
+        run: |
+          git config user.name "netway-bot"
+          git config user.email "actions@github.com"
+          git add debug_anatel.log
+          git commit -m "Log de diagnostico Anatel" || echo "nada novo"
+          git push
