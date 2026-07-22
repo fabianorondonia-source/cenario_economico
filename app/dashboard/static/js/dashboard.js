@@ -403,7 +403,11 @@ function renderChartsMercado() {
     }], {
       ...PLOTLY_DARK,
       title: tituloChart('Variação do dia (%)'),
-      xaxis: { ...EIXO, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
+      // autorange:false é obrigatório — sem isso o Plotly ignora silenciosamente
+      // o range explícito e recalcula um autorange bem mais justo aos dados
+      // reais, empurrando o rótulo das barras negativas pra cima do rótulo de
+      // categoria do eixo y (ex.: "Nasd▼0,46%" grudado).
+      xaxis: { ...EIXO, autorange: false, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
       yaxis: { ...EIXO, type: 'category', automargin: true },
       margin: { t: 34, l: 90, r: 40, b: 34 },
     }, PLOTLY_CONFIG);
@@ -441,7 +445,9 @@ function renderChartsTelecom() {
     }], {
       ...PLOTLY_DARK,
       title: tituloChart('Ações do setor — variação do dia (%)'),
-      xaxis: { ...EIXO, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
+      // Mesmo fix de autorange:false do gráfico "Variação do dia" acima —
+      // range sem isso é ignorado pelo Plotly.
+      xaxis: { ...EIXO, autorange: false, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
       yaxis: { ...EIXO, type: 'category', automargin: true },
       margin: { t: 34, l: 110, r: 40, b: 34 },
     }, PLOTLY_CONFIG);
