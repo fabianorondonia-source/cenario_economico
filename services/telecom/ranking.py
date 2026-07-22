@@ -1,25 +1,25 @@
 """
-Ranking de provedores de banda larga fixa (base de clientes) — nacional e,
-quando houver fonte confiável, por UF.
+Ranking de provedores de banda larga fixa (base de clientes) — nacional e
+por UF (RO/MT/TO/PA/MS, área de atuação do Grupo Netway).
 
-Não existe endpoint aberto/sem-chave que devolva esse ranking pronto:
-- dados.gov.br exige API key registrada (fora do padrão "sem cadastro" do
-  projeto) — devolve 401 em toda chamada sem chave.
-- O CSV bruto da Anatel (Acessos - Banda Larga Fixa, por Empresa/UF) existe
-  em informacoes.anatel.gov.br, mas o nome exato do arquivo consolidado não
-  foi localizado (tentativas de URL direta resultaram em 404).
-Por isso este módulo é curadoria manual, igual a sector.py: número, fonte e
-data ficam explícitos em cada registro, e o front-end marca "manual".
-
-Ranking estadual (RO/MT/TO/PA/MS) por base de clientes (22/07/2026): o
-Fabiano indicou a fonte — o painel oficial da Anatel
+Fonte oficial: painel público da Anatel
 (informacoes.anatel.gov.br/paineis/acessos/ranking), aba "Banda Larga
-Fixa", com filtro de UF. Não tem endpoint aberto/sem-chave (é um relatório
-Power BI embarcado), então os números foram coletados navegando o painel
-de verdade (Claude in Chrome) e lidos diretamente da tabela "Assinaturas de
-Banda Larga Fixa por empresa - <UF> (mai-2026)" — dado oficial, mas
-coletado manualmente, por isso também fica marcado "manual" como o
-restante da curadoria deste projeto.
+Fixa", com filtro de UF. É um relatório Power BI embarcado — não existe
+endpoint aberto/sem-chave pra consultar isso via API (dados.gov.br devolve
+401 sem chave registrada; o CSV bruto da Anatel não tem nome de arquivo
+localizável). Por isso os números foram coletados navegando o painel de
+verdade (Claude in Chrome) e lidos direto da tabela "Assinaturas de Banda
+Larga Fixa por empresa" (nacional e cada UF), com o visual expandido em
+tela cheia pra evitar truncamento de número grande. Curadoria manual, igual
+a sector.py: fonte e período ficam explícitos, front-end marca "manual".
+
+PERÍODO DE REFERÊNCIA: a Anatel publica com defasagem de ~1-2 meses — em
+22/07/2026 o mês mais recente disponível no painel era **mai-2026** (não
+existe jun/jul-2026 ainda; confirmado no seletor "Período" do próprio
+painel, que lista mai-2026 como opção mais recente). Atualizar este
+período requer voltar ao painel e checar se um mês novo apareceu no
+seletor antes de recoletar — não presumir que "mês mais recente do
+calendário" = "mês disponível na Anatel".
 """
 
 import sys
@@ -28,24 +28,27 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
 
-FONTE_NACIONAL = "Anatel, via TeleSíntese (02/02/2026) — acessos de banda larga fixa, base dez/2025"
+PERIODO_REFERENCIA = "mai-2026"
+FONTE_NACIONAL = f"Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa Brasil ({PERIODO_REFERENCIA})"
 
-# Ordenado pela base de clientes (mil acessos) — a métrica pedida.
+# Ordenado pela base de clientes (acessos). Mesma fonte/período dos rankings
+# estaduais abaixo (substituiu uma curadoria anterior via TeleSíntese/dez-2025,
+# que era menos atual e de fonte diferente).
 RANKING_NACIONAL = [
-    {"posicao": 1,  "nome": "Claro",            "acessos_mil": 10617, "market_share": 19.7},
-    {"posicao": 2,  "nome": "Vivo",              "acessos_mil": 8042,  "market_share": 14.9},
-    {"posicao": 3,  "nome": "Oi",                "acessos_mil": 3693,  "market_share": 6.9},
-    {"posicao": 4,  "nome": "Giga Mais Fibra",   "acessos_mil": 1580,  "market_share": 2.7},
-    {"posicao": 5,  "nome": "Brisanet",          "acessos_mil": 1554,  "market_share": 2.9},
-    {"posicao": 6,  "nome": "Vero",              "acessos_mil": 1355,  "market_share": 2.5},
-    {"posicao": 7,  "nome": "Brasil Tecpar",     "acessos_mil": 1344,  "market_share": 2.5},
-    {"posicao": 8,  "nome": "Desktop",           "acessos_mil": 1207,  "market_share": 2.2},
-    {"posicao": 9,  "nome": "TIM",               "acessos_mil": 856,   "market_share": 1.6},
-    {"posicao": 10, "nome": "Unifique",          "acessos_mil": 843,   "market_share": 1.6},
+    {"posicao": 1,  "nome": "Claro",            "acessos": 10784341, "market_share": 19.5},
+    {"posicao": 2,  "nome": "Vivo",              "acessos": 8352443,  "market_share": 15.1},
+    {"posicao": 3,  "nome": "Oi",                "acessos": 3458749,  "market_share": 6.2},
+    {"posicao": 4,  "nome": "Brisanet",          "acessos": 1578364,  "market_share": 2.8},
+    {"posicao": 5,  "nome": "Brasil Tecpar",     "acessos": 1370170,  "market_share": 2.5},
+    {"posicao": 6,  "nome": "Giga Mais Fibra",   "acessos": 1329846,  "market_share": 2.4},
+    {"posicao": 7,  "nome": "Vero",              "acessos": 1311590,  "market_share": 2.4},
+    {"posicao": 8,  "nome": "Desktop",           "acessos": 1200501,  "market_share": 2.2},
+    {"posicao": 9,  "nome": "TIM",               "acessos": 901550,   "market_share": 1.6},
+    {"posicao": 10, "nome": "Unifique",          "acessos": 883910,   "market_share": 1.6},
 ]
 
 
-FONTE_ESTADUAL = "Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa por UF (mai-2026)"
+FONTE_ESTADUAL = f"Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa por UF ({PERIODO_REFERENCIA})"
 
 RANKING_RO = [
     {"posicao": 1,  "nome": "Uni Telecom",        "acessos": 122502, "market_share": 24.0},
