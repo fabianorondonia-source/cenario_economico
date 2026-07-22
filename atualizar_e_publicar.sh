@@ -6,13 +6,17 @@ export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:$PATH"
 
 DIR="/Users/fabiano/Library/Mobile Documents/iCloud~md~obsidian/Documents/Fabiano IA/Netway/Economic Intelligence Dashboard"
 cd "$DIR" || exit 1
-LOG="$DIR/auto_update.log"
+LOG="$DIR/atualizacao.log"
 
-echo "=== $(date '+%d/%m/%Y %H:%M') ===" >> "$LOG"
+echo "" >> "$LOG"
+echo "=== $(date '+%d/%m/%Y %H:%M') — automação diária ===" >> "$LOG"
 
-if [ -d ".venv" ]; then
-  source .venv/bin/activate
+if [ ! -d ".venv" ]; then
+  python3 -m venv .venv >> "$LOG" 2>&1
 fi
+source .venv/bin/activate
+pip install --quiet --upgrade pip >> "$LOG" 2>&1
+pip install --quiet -r requirements.txt >> "$LOG" 2>&1
 
 python3 export_estatico.py >> "$LOG" 2>&1
 

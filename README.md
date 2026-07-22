@@ -22,6 +22,18 @@ Isso cria um ambiente virtual, instala as dependências (`requirements.txt`),
 roda a primeira atualização de indicadores e sobe o servidor em
 `http://localhost:8750` (porta configurável em `config/settings.json`).
 
+Se a porta já estava em uso por uma execução anterior (ou pelo painel
+antigo), `start.command` encerra o processo velho e sobe a versão atual —
+assim nunca fica preso mostrando código desatualizado.
+
+## Onde ver o log
+
+Toda execução de `start.command`, `Publicar_no_GitHub.command` ou da
+automação diária grava (e acrescenta) em **`atualizacao.log`**, na raiz
+desta pasta — sempre o mesmo arquivo, não importa qual dos três você rodou.
+Abra esse arquivo num editor de texto qualquer para ver se cada indicador
+buscou dado com sucesso ("— OK") ou falhou (com o motivo do erro).
+
 ## Arquitetura
 
 ```
@@ -85,8 +97,7 @@ Duplo clique **uma única vez** em `Instalar_Atualizacao_Automatica.command`.
 Isso liga um agendamento (launchd) que todo dia às 7h roda
 `atualizar_e_publicar.sh` sozinho: atualiza todos os indicadores automáticos
 e republica o snapshot no GitHub — sem você precisar abrir `start.command`
-nem `Publicar_no_GitHub.command`. Log de cada execução em `auto_update.log`.
-Para desativar: `launchctl unload ~/Library/LaunchAgents/com.netway.economicintelligencedashboard.plist`.
+nem `Publicar_no_GitHub.command`. Para desativar: `launchctl unload ~/Library/LaunchAgents/com.netway.economicintelligencedashboard.plist`.
 
 ## Adicionando um novo indicador
 

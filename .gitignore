@@ -4,6 +4,8 @@ __pycache__/
 *.pyc
 database/*.db
 logs/*.log
+atualizacao.log
+auto_update.log
 config/settings.local.json
 .venv/
 venv/
