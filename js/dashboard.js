@@ -373,6 +373,35 @@ function renderChartsTelecom() {
   }
 }
 
+// ===== Ranking de provedores (base de clientes) =====
+function renderChartRankingNacional() {
+  const item = (dados.telecom_ranking || {}).ranking_nacional;
+  const lista = (item && item.historico) || [];
+  if (lista.length === 0) {
+    graficoVazio('chart-ranking-nacional', 'ranking nacional ainda não foi carregado');
+    return;
+  }
+  // Já vem ordenado por base de clientes (maior primeiro); Plotly desenha
+  // barras horizontais de baixo pra cima, então invertemos pra o 1º lugar
+  // aparecer no topo.
+  const ordenado = [...lista].sort((a, b) => b.acessos_mil - a.acessos_mil).reverse();
+  const nomes = ordenado.map(p => p.nome);
+  const valores = ordenado.map(p => p.acessos_mil);
+  const cores = ordenado.map((_, i) => i === ordenado.length - 1 ? COR.accent : `rgba(124,108,240,${0.35 + (i / ordenado.length) * 0.4})`);
+  plotlySeguro('chart-ranking-nacional', [{
+    x: valores, y: nomes, type: 'bar', orientation: 'h',
+    marker: { color: cores },
+    text: valores.map(v => fmtNum(v, 0) + ' mil'), textposition: 'outside',
+    textfont: { color: COR.textoSec, size: 10.5 },
+  }], {
+    ...PLOTLY_DARK,
+    title: tituloChart('Top 10 provedores do Brasil — base de clientes (mil acessos)'),
+    xaxis: { ...EIXO, title: { text: 'mil acessos', font: { size: 10, color: COR.textoSec } } },
+    yaxis: { ...EIXO, automargin: true },
+    margin: { t: 34, l: 140, r: 60, b: 34 },
+  }, PLOTLY_CONFIG);
+}
+
 function renderChartHistoricoScores() {
   const h = dados.historico_scores || [];
   if (h.length < 2) {
@@ -395,7 +424,7 @@ function render() {
   const passos = [
     renderTicker, renderKpis, renderScores, renderInsights, renderAlertas,
     renderTelecomTabelas, renderChartsEconomia, renderChartsMercado,
-    renderChartsTelecom, renderChartHistoricoScores,
+    renderChartsTelecom, renderChartRankingNacional, renderChartHistoricoScores,
   ];
   for (const passo of passos) {
     try { passo(); } catch (e) { console.warn(`falha ao renderizar ${passo.name}`, e); }
