@@ -61,3 +61,8 @@ FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br
 FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/UF.csv
 FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Empresa.csv
 FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Grupo.csv
+=== Baixando a pagina HTML do dataset no dados.gov.br (procurando link cru) ===
+FALHOU (HTTPError: HTTP Error 401: Unauthorized) — https://dados.gov.br/dataset/dados-de-acessos-de-comunicacao-multimidia
+=== Tentando API CKAN sem parametro de auth em outro formato (dados.gov.br v2?) ===
+FALHOU (HTTPError: HTTP Error 401: Unauthorized) — https://dados.gov.br/dados/api/publico/conjuntos-dados/dados-de-acessos-de-comunicacao-multimidia
+FALHOU (HTTPError: HTTP Error 401: Unauthorized) — https://dados.gov.br/api/publico/conjuntos-dados/dados-de-acessos-de-comunicacao-multimidia
