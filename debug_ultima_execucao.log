@@ -3,8 +3,8 @@
 [bcb] selic_meta: 14.25 (2026-08-05) — OK
 [bcb] ipca_mensal: 0.16 (2026-06-01) — OK
 [bcb] igpm_mensal: -0.5 (2026-06-01) — OK
-[bcb] dolar_ptax: 5.078 (2026-07-21) — OK
-[bcb] euro_ptax: 5.793 (2026-07-21) — OK
+[bcb] dolar_ptax: 5.0638 (2026-07-22) — OK
+[bcb] euro_ptax: 5.7803 (2026-07-22) — OK
 [bcb] desemprego: 5.6 (2026-05-01) — OK
 [bcb] divida_bruta_pib: 77.38 (2024-10-01) — OK
 [bcb] resultado_primario: 1.91 (2024-10-01) — OK
@@ -14,21 +14,21 @@
 [bcb] taxa_media_credito: 33.42 (2026-05-01) — OK
 [bcb] inadimplencia: 4.74 (2026-05-01) — OK
 [bcb] ipca_12m: 4.64% — OK
-[markets] ibovespa: 176007.421875 (2026-07-22) — OK
-[markets] sp500: 7518.27001953125 (2026-07-22) — OK
-[markets] nasdaq: 25823.208984375 (2026-07-22) — OK
-[markets] dow_jones: 52387.359375 (2026-07-22) — OK
-[markets] ouro: 4164.7998046875 (2026-07-22) — OK
-[markets] petroleo: 86.2300033569336 (2026-07-22) — OK
-[markets] vix: 16.93000030517578 (2026-07-22) — OK
-[markets] bitcoin: US$ 65979 — OK
+[markets] ibovespa: 177241.03125 (2026-07-22) — OK
+[markets] sp500: 7508.1201171875 (2026-07-22) — OK
+[markets] nasdaq: 25747.333984375 (2026-07-22) — OK
+[markets] dow_jones: 52294.7109375 (2026-07-22) — OK
+[markets] ouro: 4148.39990234375 (2026-07-22) — OK
+[markets] petroleo: 86.87999725341797 (2026-07-22) — OK
+[markets] vix: 16.809999465942383 (2026-07-22) — OK
+[markets] bitcoin: US$ 66000 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.639999866485596
-[telecom.players] American Tower: cotação 165.96499633789062
-[telecom.players] IHS Holding: cotação 8.234999656677246
+[telecom.players] Unifique: cotação 5.670000076293945
+[telecom.players] American Tower: cotação 166.2100067138672
+[telecom.players] IHS Holding: cotação 8.244999885559082
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -45,4 +45,4 @@
 [telecom.ranking] ranking de PA carregado no cache.
 [telecom.ranking] ranking de MS carregado no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 15:54 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 18:02 — index.html + css/ + js/ + images/ na raiz do projeto.
