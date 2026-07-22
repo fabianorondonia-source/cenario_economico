@@ -25,7 +25,11 @@ fi
 
 git add -A >> "$LOG" 2>&1
 if git commit -m "Atualização automática — $(date '+%d/%m/%Y %H:%M')" >> "$LOG" 2>&1; then
-  git push origin main >> "$LOG" 2>&1
+  if ! git push origin main >> "$LOG" 2>&1; then
+    echo "Push normal falhou — tentando reenvio forçado (histórico local diferente do remoto)..." >> "$LOG"
+    git fetch origin main >> "$LOG" 2>&1
+    git push origin main --force >> "$LOG" 2>&1
+  fi
 else
   echo "Nada novo para publicar." >> "$LOG"
 fi
