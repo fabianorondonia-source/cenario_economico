@@ -2,7 +2,7 @@ name: Atualizar painel
 
 # Roda direto na infraestrutura do GitHub — não depende do Mac do Fabiano
 # estar ligado, nem de internet local. Busca os dados reais (Banco Central,
-# stooq.com, CoinGecko) e republica o snapshot (index.html) sozinho.
+# Yahoo Finance, CoinGecko) e republica o snapshot (index.html) sozinho.
 
 on:
   schedule:
