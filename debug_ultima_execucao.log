@@ -14,20 +14,20 @@
 [bcb] taxa_media_credito: 33.42 (2026-05-01) — OK
 [bcb] inadimplencia: 4.74 (2026-05-01) — OK
 [bcb] ipca_12m: 4.64% — OK
-[markets] ibovespa: 175545.734375 (2026-07-22) — OK
-[markets] sp500: 7503.91015625 (2026-07-22) — OK
-[markets] nasdaq: 25735.611328125 (2026-07-22) — OK
-[markets] dow_jones: 52376.5 (2026-07-22) — OK
-[markets] ouro: 4148.60009765625 (2026-07-22) — OK
-[markets] petroleo: 86.66000366210938 (2026-07-22) — OK
-[markets] vix: 17.280000686645508 (2026-07-22) — OK
-[markets] bitcoin: US$ 65831 — OK
+[markets] ibovespa: 176622.359375 (2026-07-22) — OK
+[markets] sp500: 7518.990234375 (2026-07-22) — OK
+[markets] nasdaq: 25799.6640625 (2026-07-22) — OK
+[markets] dow_jones: 52505.12109375 (2026-07-22) — OK
+[markets] ouro: 4150.2998046875 (2026-07-22) — OK
+[markets] petroleo: 86.61000061035156 (2026-07-22) — OK
+[markets] vix: 17.1299991607666 (2026-07-22) — OK
+[markets] bitcoin: US$ 65950 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.699999809265137
-[telecom.players] American Tower: cotação 164.2899932861328
+[telecom.players] Unifique: cotação 5.71999979019165
+[telecom.players] American Tower: cotação 164.55999755859375
 [telecom.players] IHS Holding: cotação 8.25
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
@@ -45,4 +45,4 @@
 [telecom.ranking] ranking de PA carregado no cache.
 [telecom.ranking] ranking de MS carregado no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 13:52 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 14:05 — index.html + css/ + js/ + images/ na raiz do projeto.

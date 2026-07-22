@@ -390,27 +390,36 @@ function renderChartRanking(elId, chave, campoValor, unidadeTxt, titulo) {
   const ordenado = [...lista].sort((a, b) => b[campoValor] - a[campoValor]).reverse();
   const nomes = ordenado.map(p => p.nome);
   const valores = ordenado.map(p => p[campoValor]);
+  const maxValor = Math.max(...valores);
   const cores = ordenado.map((_, i) => i === ordenado.length - 1 ? COR.accent : `rgba(124,108,240,${0.35 + (i / ordenado.length) * 0.4})`);
   plotlySeguro(elId, [{
     x: valores, y: nomes, type: 'bar', orientation: 'h',
     marker: { color: cores },
     text: valores.map(v => fmtNum(v, 0) + (unidadeTxt ? ' ' + unidadeTxt : '')), textposition: 'outside',
     textfont: { color: COR.textoSec, size: 10.5 },
+    // cliponaxis:false evita que o texto do rótulo (fora da barra) seja
+    // cortado pelo clip-path da área de plotagem quando o valor chega perto
+    // do fim do eixo — sem isso, o número do 1º colocado (a maior barra)
+    // aparecia cortado tipo "1.2" em vez de "122.502".
+    cliponaxis: false,
   }], {
     ...PLOTLY_DARK,
     title: tituloChart(titulo),
-    xaxis: { ...EIXO, title: { text: unidadeTxt || 'acessos', font: { size: 10, color: COR.textoSec } } },
+    // Range explícito com folga de 22% à direita: dá espaço pro rótulo da
+    // barra mais longa (que encosta no fim do eixo) sem depender só do
+    // cliponaxis, e evita que o Plotly recalcule um range justo demais.
+    xaxis: { ...EIXO, range: [0, maxValor * 1.22], title: { text: unidadeTxt || 'acessos', font: { size: 10, color: COR.textoSec } } },
     // type:'category' precisa vir explícito — o Plotly (nesta versão) não
     // detectou sozinho que o eixo y de uma barra horizontal com nomes de
     // operadora era categórico, e desenhava um eixo numérico vazio (mesmo
     // bug de fundo que já tínhamos corrigido nos outros gráficos).
     yaxis: { ...EIXO, type: 'category', automargin: true },
-    margin: { t: 34, l: 140, r: 50, b: 34 },
+    margin: { t: 34, l: 140, r: 60, b: 34 },
   }, PLOTLY_CONFIG);
 }
 
 function renderChartRankingNacional() {
-  renderChartRanking('chart-ranking-nacional', 'ranking_nacional', 'acessos_mil', 'mil', 'Top 10 provedores do Brasil — base de clientes (mil acessos)');
+  renderChartRanking('chart-ranking-nacional', 'ranking_nacional', 'acessos', '', 'Top 10 provedores do Brasil — base de clientes (acessos)');
   renderChartRanking('chart-ranking-ro', 'ranking_ro', 'acessos', '', 'Top 10 — Rondônia (RO)');
   renderChartRanking('chart-ranking-mt', 'ranking_mt', 'acessos', '', 'Top 10 — Mato Grosso (MT)');
   renderChartRanking('chart-ranking-to', 'ranking_to', 'acessos', '', 'Top 10 — Tocantins (TO)');
