@@ -18,10 +18,10 @@
 [markets] sp500: 7509.2001953125 (2026-07-21) — OK
 [markets] nasdaq: 25837.2109375 (2026-07-21) — OK
 [markets] dow_jones: 52224.640625 (2026-07-21) — OK
-[markets] ouro: 4115.10009765625 (2026-07-22) — OK
-[markets] petroleo: 87.41000366210938 (2026-07-22) — OK
-[markets] vix: 17.450000762939453 (2026-07-22) — OK
-[markets] bitcoin: US$ 65587 — OK
+[markets] ouro: 4122.10009765625 (2026-07-22) — OK
+[markets] petroleo: 87.12999725341797 (2026-07-22) — OK
+[markets] vix: 17.43000030517578 (2026-07-22) — OK
+[markets] bitcoin: US$ 65610 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -40,4 +40,4 @@
 [telecom.players] Neutral Networks: perfil curado (capital fechado)
 [telecom.ranking] ranking nacional de provedores carregado no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 13:07 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 13:14 — index.html + css/ + js/ + images/ na raiz do projeto.
