@@ -52,3 +52,12 @@ FALHOU (HTTPError: HTTP Error 404: Not Found) — https://www.anatel.gov.br/dado
 FALHOU (HTTPError: HTTP Error 404: Not Found) — https://www.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Acessos_Banda_Larga_Fixa_UF.csv
 FALHOU (HTTPError: HTTP Error 404: Not Found) — https://www.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Acessos_Banda_Larga_Fixa_Empresa.csv
 FALHOU (HTTPError: HTTP Error 404: Not Found) — https://www.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Acessos_Banda_Larga_Fixa_Grupo.csv
+=== Achado no inventario: dataset real é 'dados-de-acessos-de-comunicacao-multimidia' ===
+=== Testando API CKAN do dados.gov.br com o slug certo ===
+FALHOU (HTTPError: HTTP Error 401: Unauthorized) — https://dados.gov.br/api/3/action/package_show?id=dados-de-acessos-de-comunicacao-multimidia
+=== Testando subdominio informacoes.anatel.gov.br (onde o painel realmente mora) ===
+FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Total.csv
+FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Municipio.csv
+FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/UF.csv
+FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Empresa.csv
+FALHOU (HTTPError: HTTP Error 520: <none>) — https://informacoes.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Grupo.csv
