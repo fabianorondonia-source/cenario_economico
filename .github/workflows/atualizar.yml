@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "0 10 * * *"   # 10:00 UTC = 07:00 no horário de Brasília (UTC-3, sem horário de verão)
   workflow_dispatch: {}     # permite rodar manualmente pela aba "Actions" do GitHub
+  push:
+    branches: [ main ]      # cada push já regenera o snapshot com dados reais
+                             # (commits feitos pelo próprio GITHUB_TOKEN do bot
+                             # não disparam push de novo — sem risco de loop)
 
 permissions:
   contents: write
