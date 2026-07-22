@@ -1,10 +1,18 @@
 """
-Mercado financeiro — fontes 100% gratuitas e sem necessidade de cadastro/chave:
+Mercado financeiro — fontes gratuitas e sem necessidade de cadastro/chave:
 
-  - stooq.com — CSV histórico diário (https://stooq.com/q/d/l/?s=<symbol>&i=d),
-    usado para índices e commodities: Ibovespa, S&P 500, Nasdaq, Dow Jones,
-    ouro, petróleo, VIX (volatilidade).
+  - Yahoo Finance (query1.finance.yahoo.com/v8/finance/chart/<symbol>) — JSON
+    público, sem chave, usado para índices e commodities: Ibovespa, S&P 500,
+    Nasdaq, Dow Jones, ouro, petróleo, VIX (volatilidade) e as ações dos
+    grupos de capital aberto do setor.
   - CoinGecko — API pública (https://api.coingecko.com/api/v3/...) para Bitcoin.
+
+Por que não stooq.com (usado numa versão anterior): confirmado em produção
+(rodando no GitHub Actions) que stooq devolve uma página de bloqueio
+anti-robô (challenge com <noscript>) pro CSV histórico quando a requisição
+vem de IP de nuvem/datacenter — não é algo que dá pra contornar só trocando
+o User-Agent, exigiria executar JavaScript de verdade (navegador). O Yahoo
+Finance tolera bem esse tipo de acesso programático.
 
 Símbolos de índice variam entre provedores e de vez em quando mudam — cada
 indicador tem uma lista de símbolos candidatos, tentados em ordem; o primeiro
@@ -12,11 +20,10 @@ que responder com dado válido é usado. Se nenhum responder, o valor anterior
 em cache é mantido (nunca quebra a atualização como um todo).
 """
 
-import csv
-import io
 import sys
 import os
 import json
+import urllib.parse
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
@@ -25,15 +32,15 @@ from services._http import abrir_url, descrever_erro  # noqa: E402
 TIMEOUT = 10
 MAX_HISTORICO = 120
 
-# chave -> (lista de símbolos stooq candidatos, label, unidade)
-INDICES_STOOQ = {
-    "ibovespa":  {"simbolos": ["^bvsp", "bvsp"],           "unidade": "pontos", "label": "Ibovespa"},
-    "sp500":     {"simbolos": ["^spx"],                     "unidade": "pontos", "label": "S&P 500"},
-    "nasdaq":    {"simbolos": ["^ndq", "^ixic"],            "unidade": "pontos", "label": "Nasdaq Composite"},
-    "dow_jones": {"simbolos": ["^dji"],                     "unidade": "pontos", "label": "Dow Jones"},
-    "ouro":      {"simbolos": ["xauusd"],                   "unidade": "US$/oz", "label": "Ouro (XAU/USD)"},
-    "petroleo":  {"simbolos": ["cl.f"],                     "unidade": "US$/barril", "label": "Petróleo (WTI)"},
-    "vix":       {"simbolos": ["^vix"],                     "unidade": "pontos", "label": "Volatilidade (VIX)"},
+# chave -> (lista de símbolos Yahoo Finance candidatos, label, unidade)
+INDICES_YAHOO = {
+    "ibovespa":  {"simbolos": ["^BVSP"],           "unidade": "pontos", "label": "Ibovespa"},
+    "sp500":     {"simbolos": ["^GSPC"],           "unidade": "pontos", "label": "S&P 500"},
+    "nasdaq":    {"simbolos": ["^IXIC"],           "unidade": "pontos", "label": "Nasdaq Composite"},
+    "dow_jones": {"simbolos": ["^DJI"],            "unidade": "pontos", "label": "Dow Jones"},
+    "ouro":      {"simbolos": ["GC=F"],            "unidade": "US$/oz", "label": "Ouro (futuro COMEX)"},
+    "petroleo":  {"simbolos": ["CL=F"],            "unidade": "US$/barril", "label": "Petróleo (WTI futuro)"},
+    "vix":       {"simbolos": ["^VIX"],            "unidade": "pontos", "label": "Volatilidade (VIX)"},
 }
 
 
@@ -41,32 +48,42 @@ def log(msg):
     print(f"[markets] {msg}")
 
 
-def _stooq_csv(simbolo):
-    url = f"https://stooq.com/q/d/l/?s={simbolo}&i=d"
+def _yahoo_chart(simbolo, range_="6mo"):
+    """Devolve [{"data": "YYYY-MM-DD", "valor": float}, ...] a partir do
+    endpoint público de gráfico do Yahoo Finance. Sem chave/cadastro."""
+    simbolo_url = urllib.parse.quote(simbolo, safe="")
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{simbolo_url}?range={range_}&interval=1d"
     with abrir_url(url, timeout=TIMEOUT) as resp:
         texto = resp.read().decode("utf-8", errors="replace")
-    linhas = list(csv.DictReader(io.StringIO(texto)))
-    if not linhas or "Date" not in (linhas[0] or {}):
-        # stooq às vezes devolve "Exceeded the daily hits limit" ou uma
-        # página de bloqueio em vez do CSV — loga um trecho pra facilitar
-        # diagnóstico em vez de só dizer "vazio".
+    try:
+        payload = json.loads(texto)
+    except json.JSONDecodeError:
         amostra = texto.strip().replace("\n", " ")[:120]
-        log(f"{simbolo}: resposta não é CSV válido — trecho: {amostra!r}")
+        log(f"{simbolo}: resposta não é JSON válido — trecho: {amostra!r}")
         return []
+    resultados = (payload.get("chart") or {}).get("result") or []
+    if not resultados:
+        erro = (payload.get("chart") or {}).get("error")
+        log(f"{simbolo}: sem resultado ({erro}).")
+        return []
+    r = resultados[0]
+    timestamps = r.get("timestamp") or []
+    fechamentos = ((r.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
     out = []
-    for row in linhas:
-        try:
-            out.append({"data": row["Date"], "valor": float(row["Close"])})
-        except (ValueError, KeyError, TypeError):
+    for ts, fechamento in zip(timestamps, fechamentos):
+        if fechamento is None:
             continue
+        data_str = __import__("datetime").datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
+        out.append({"data": data_str, "valor": float(fechamento)})
     return out
 
 
 def _buscar_indice(simbolos, n_dias=MAX_HISTORICO):
     ultimo_erro = None
+    range_ = "1y" if n_dias > 60 else "6mo"
     for s in simbolos:
         try:
-            historico = _stooq_csv(s)
+            historico = _yahoo_chart(s, range_=range_)
             if historico:
                 return historico[-n_dias:]
         except Exception as e:
@@ -78,7 +95,10 @@ def _buscar_indice(simbolos, n_dias=MAX_HISTORICO):
 
 
 def atualizar_indices_stooq():
-    for chave, meta in INDICES_STOOQ.items():
+    """Nome mantido (usado por players.py e pelo restante do módulo) mesmo
+    após a troca de stooq -> Yahoo Finance, pra não precisar tocar em quem
+    já importa essa função."""
+    for chave, meta in INDICES_YAHOO.items():
         try:
             historico = _buscar_indice(meta["simbolos"])
             if not historico:
@@ -91,7 +111,7 @@ def atualizar_indices_stooq():
                 variacao = round(((atual["valor"] - anterior["valor"]) / anterior["valor"]) * 100, 2)
             db.upsert_indicador(
                 chave=chave, categoria="mercado", valor=atual["valor"], unidade=meta["unidade"],
-                data_referencia=atual["data"], variacao_dia=variacao, fonte="stooq.com",
+                data_referencia=atual["data"], variacao_dia=variacao, fonte="Yahoo Finance",
                 atualizacao="automatica", historico=historico
             )
             log(f"{chave}: {atual['valor']} ({atual['data']}) — OK")

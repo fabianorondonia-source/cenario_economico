@@ -1,10 +1,12 @@
 """
 Grandes grupos do setor de conectividade citados pelo Fabiano. Para os
-grupos de capital aberto, buscamos cotação real (stooq.com, gratuito, sem
-chave) como termômetro de mercado. Para os de capital fechado, mantemos só
-o perfil curado (segmento/região) — não existe dado público de mercado
-para eles, e não inventamos números de faturamento/clientes que não temos
-fonte para confirmar.
+grupos de capital aberto, buscamos cotação real (Yahoo Finance, gratuito,
+sem chave — trocado de stooq.com porque stooq bloqueia requisições vindas
+de IP de nuvem/datacenter, como as do GitHub Actions) como termômetro de
+mercado. Para os de capital fechado, mantemos só o perfil curado
+(segmento/região) — não existe dado público de mercado para eles, e não
+inventamos números de faturamento/clientes que não temos fonte para
+confirmar.
 """
 
 import sys
@@ -17,10 +19,10 @@ from services.indicators.markets import _buscar_indice  # noqa: E402
 from services._http import descrever_erro  # noqa: E402
 
 GRUPOS = {
-    "Brisanet":     {"tipo": "capital aberto (B3: BRIT3)", "simbolos_stooq": ["brit3.br", "brit3"], "segmento": "FTTH + 5G FWA — Nordeste"},
-    "Unifique":     {"tipo": "capital aberto (B3: FIQE3)", "simbolos_stooq": ["fiqe3.br", "fiqe3"], "segmento": "FTTH — Sul do Brasil"},
-    "American Tower": {"tipo": "capital aberto (NYSE: AMT)", "simbolos_stooq": ["amt.us", "amt"], "segmento": "Infraestrutura de torres"},
-    "IHS Holding":  {"tipo": "capital aberto (NYSE: IHS)", "simbolos_stooq": ["ihs.us", "ihs"], "segmento": "Infraestrutura de torres — África e Brasil"},
+    "Brisanet":     {"tipo": "capital aberto (B3: BRIT3)", "simbolos_stooq": ["BRIT3.SA"], "segmento": "FTTH + 5G FWA — Nordeste"},
+    "Unifique":     {"tipo": "capital aberto (B3: FIQE3)", "simbolos_stooq": ["FIQE3.SA"], "segmento": "FTTH — Sul do Brasil"},
+    "American Tower": {"tipo": "capital aberto (NYSE: AMT)", "simbolos_stooq": ["AMT"], "segmento": "Infraestrutura de torres"},
+    "IHS Holding":  {"tipo": "capital aberto (NYSE: IHS)", "simbolos_stooq": ["IHS"], "segmento": "Infraestrutura de torres — África e Brasil"},
     "Desktop":      {"tipo": "capital fechado", "simbolos_stooq": [], "segmento": "FTTH — interior de São Paulo"},
     "Vero":         {"tipo": "capital fechado", "simbolos_stooq": [], "segmento": "FTTH — atuação nacional (plataforma multirregional)"},
     "Ligga":        {"tipo": "capital fechado (origem Copel Telecom)", "simbolos_stooq": [], "segmento": "FTTH — Sul do Brasil"},
@@ -60,7 +62,7 @@ def atualizar_todos():
             chave=chave, categoria="telecom_grupos", valor=cotacao,
             unidade="cotação (última)" if cotacao else meta["tipo"],
             data_referencia=data_ref, variacao_dia=variacao,
-            fonte="stooq.com" if cotacao else "Perfil curado — sem dado público de mercado",
+            fonte="Yahoo Finance" if cotacao else "Perfil curado — sem dado público de mercado",
             atualizacao="automatica" if meta["simbolos_stooq"] else "manual",
             historico=[{"nome": nome, "tipo": meta["tipo"], "segmento": meta["segmento"]}]
         )
