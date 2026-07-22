@@ -83,11 +83,17 @@
     </div>
     <div class="tabela-card">
       <h3>Movimentações recentes de M&amp;A</h3>
-      <table class="tabela" id="tabela-movs"><thead><tr><th>Período</th><th>Operação</th><th>Região</th><th>Observação</th></tr></thead><tbody></tbody></table>
+      <table class="tabela" id="tabela-movs"><thead><tr><th>Período</th><th>Operação</th><th>Região</th><th>Observação</th><th>R$/Assinante</th></tr></thead><tbody></tbody></table>
     </div>
-    <div class="riscos-card">
-      <h3>Riscos regulatórios</h3>
-      <ul id="lista-riscos"></ul>
+    <div class="charts-row" style="margin-top:14px">
+      <div class="riscos-card">
+        <h3>Riscos regulatórios</h3>
+        <ul id="lista-riscos"></ul>
+      </div>
+      <div class="riscos-card" id="card-fust">
+        <h3>FUST — Janela de oportunidade <span class="manual">manual</span></h3>
+        <div id="conteudo-fust"></div>
+      </div>
     </div>
   </section>
 
@@ -107,6 +113,22 @@
       <div class="chart-card"><div id="chart-ranking-pa" class="chart chart-alto"></div></div>
       <div class="chart-card"><div id="chart-ranking-ms" class="chart chart-alto"></div></div>
     </div>
+
+    <h3 style="margin-top:22px">Concentração de mercado (HHI) e ameaça Starlink, por estado</h3>
+    <p class="nota-secao">HHI calculado por nós a partir do top 10 acima (subestima o HHI real, que incluiria a cauda longa de provedores pequenos — mas serve bem para comparar concentração relativa entre os 5 estados). Menor HHI = mercado mais fragmentado (mais alvos de consolidação); maior HHI = já existe um líder claro.</p>
+    <div class="charts-row">
+      <div class="chart-card"><div id="chart-hhi-estados" class="chart chart-alto"></div></div>
+      <div class="tabela-card" id="card-starlink">
+        <h3>Ameaça Starlink por estado</h3>
+        <table class="tabela" id="tabela-starlink"><thead><tr><th>UF</th><th>Posição</th><th>Participação</th><th>Nível</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Contexto Regional — Agronegócio <span class="manual">manual</span></h2>
+    <p class="nota-secao">O poder de compra do assinante potencial em RO/MT/TO/PA/MS está mais ligado ao ciclo do agronegócio regional do que ao IPCA nacional. Preço de commodity em alta tende a significar mais renda disponível na praça (melhor ARPU/menor churn); em queda, mais pressão de inadimplência em município agro-dependente.</p>
+    <div id="kpis-agro" class="kpis-grid"></div>
   </section>
 
   <section class="secao">

@@ -124,6 +124,71 @@ RANKINGS_ESTADUAIS = {
 }
 
 
+def _classificar_hhi(hhi):
+    # Faixas do DOJ/FTC (usadas também como referência no Brasil por Cade/
+    # Anatel em análises de concentração): <1500 pouco concentrado,
+    # 1500-2500 moderadamente concentrado, >2500 altamente concentrado.
+    if hhi >= 2500:
+        return "alta concentração"
+    if hhi >= 1500:
+        return "concentração moderada"
+    return "baixa concentração (fragmentado)"
+
+
+def calcular_hhi_por_uf():
+    """HHI (Herfindahl-Hirschman) calculado só com o TOP 10 informado pela
+    Anatel por UF — não é o HHI real do mercado (faltam os pequenos
+    provedores da "cauda longa", que reduziriam ainda mais o HHI real do
+    top 10 sozinho já é subestimado por natureza, mas é honesto e serve
+    muito bem pra COMPARAR concentração relativa entre os 5 estados de
+    atuação da Netway, que é o uso pretendido aqui: menor HHI = mercado
+    mais fragmentado (mais alvos de roll-up, nenhum dono claro); maior HHI
+    = já existe um líder consolidado (RO, por causa da Uni Telecom com 24%
+    sozinha) — devir a due diligence prioritária pra ESSE ativo específico,
+    não pro mercado como um todo.
+    """
+    resultado = []
+    for chave, (uf, ranking) in RANKINGS_ESTADUAIS.items():
+        hhi = sum((p["market_share"]) ** 2 for p in ranking)
+        lider = max(ranking, key=lambda p: p["market_share"])
+        resultado.append({
+            "uf": uf,
+            "hhi_top10": round(hhi, 0),
+            "nivel": _classificar_hhi(hhi),
+            "lider": lider["nome"],
+            "lider_share": lider["market_share"],
+        })
+    return resultado
+
+
+def calcular_ameaca_starlink():
+    """Starlink já aparece nos rankings estaduais coletados — em vez de
+    deixar isso só como mais uma linha na tabela, extrai a posição/share
+    dele em cada UF e classifica o nível de ameaça. É a ameaça competitiva
+    mais relevante especificamente pra área RURAL onde a Netway atua (não
+    depende de concorrente construir rede física local), por isso merece
+    destaque próprio em vez de ficar escondido em 5 tabelas diferentes.
+    """
+    resultado = []
+    for chave, (uf, ranking) in RANKINGS_ESTADUAIS.items():
+        starlink = next((p for p in ranking if "Starlink" in p["nome"]), None)
+        if not starlink:
+            resultado.append({"uf": uf, "presente": False, "nivel": "fora do top 10"})
+            continue
+        share = starlink["market_share"]
+        if share >= 8:
+            nivel = "ameaça alta"
+        elif share >= 4:
+            nivel = "ameaça moderada"
+        else:
+            nivel = "ameaça baixa"
+        resultado.append({
+            "uf": uf, "presente": True, "posicao": starlink["posicao"],
+            "market_share": share, "nivel": nivel,
+        })
+    return resultado
+
+
 def atualizar_todos():
     db.upsert_indicador(
         chave="ranking_nacional", categoria="telecom_ranking", valor=None, unidade="lista",
@@ -137,6 +202,22 @@ def atualizar_todos():
             fonte=FONTE_ESTADUAL, atualizacao="manual", historico=ranking
         )
         print(f"[telecom.ranking] ranking de {uf} carregado no cache.")
+
+    hhi = calcular_hhi_por_uf()
+    db.upsert_indicador(
+        chave="hhi_estados", categoria="telecom_ranking", valor=None, unidade="HHI (top 10)",
+        fonte=f"Calculado a partir dos rankings Anatel acima ({PERIODO_REFERENCIA})",
+        atualizacao="manual", historico=hhi
+    )
+    print("[telecom.ranking] HHI de concentração por estado calculado.")
+
+    ameaca_starlink = calcular_ameaca_starlink()
+    db.upsert_indicador(
+        chave="ameaca_starlink", categoria="telecom_ranking", valor=None, unidade="nível",
+        fonte=f"Calculado a partir dos rankings Anatel acima ({PERIODO_REFERENCIA})",
+        atualizacao="manual", historico=ameaca_starlink
+    )
+    print("[telecom.ranking] ameaça Starlink por estado calculada.")
 
 
 if __name__ == "__main__":
