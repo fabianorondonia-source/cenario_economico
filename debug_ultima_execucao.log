@@ -18,10 +18,10 @@
 [markets] sp500: 7509.2001953125 (2026-07-21) — OK
 [markets] nasdaq: 25837.2109375 (2026-07-21) — OK
 [markets] dow_jones: 52224.640625 (2026-07-21) — OK
-[markets] ouro: 4121.60009765625 (2026-07-22) — OK
-[markets] petroleo: 87.12999725341797 (2026-07-22) — OK
-[markets] vix: 17.350000381469727 (2026-07-22) — OK
-[markets] bitcoin: US$ 65997 — OK
+[markets] ouro: 4134.7998046875 (2026-07-22) — OK
+[markets] petroleo: 87.05000305175781 (2026-07-22) — OK
+[markets] vix: 17.6299991607666 (2026-07-22) — OK
+[markets] bitcoin: US$ 65825 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -39,4 +39,4 @@
 [telecom.players] Fibrasil: perfil curado (capital fechado)
 [telecom.players] Neutral Networks: perfil curado (capital fechado)
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/07/2026 11:06 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 22/07/2026 12:32 — index.html + css/ + js/ + images/ na raiz do projeto.
