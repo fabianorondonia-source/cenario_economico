@@ -3,8 +3,8 @@
 [bcb] selic_meta: 14.25 (2026-08-05) — OK
 [bcb] ipca_mensal: 0.16 (2026-06-01) — OK
 [bcb] igpm_mensal: -0.5 (2026-06-01) — OK
-[bcb] dolar_ptax: 5.0638 (2026-07-22) — OK
-[bcb] euro_ptax: 5.7803 (2026-07-22) — OK
+[bcb] dolar_ptax: 5.0807 (2026-07-23) — OK
+[bcb] euro_ptax: 5.7788 (2026-07-23) — OK
 [bcb] desemprego: 5.6 (2026-05-01) — OK
 [bcb] divida_bruta_pib: 77.38 (2024-10-01) — OK
 [bcb] resultado_primario: 1.91 (2024-10-01) — OK
@@ -16,21 +16,21 @@
 [bcb] ipca_12m: 4.64% — OK
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 176653.4375 (2026-07-23) — OK
-[markets] sp500: 7407.740234375 (2026-07-23) — OK
-[markets] nasdaq: 25127.33984375 (2026-07-23) — OK
-[markets] dow_jones: 51731.41015625 (2026-07-23) — OK
-[markets] ouro: 4050.300048828125 (2026-07-23) — OK
-[markets] petroleo: 91.91000366210938 (2026-07-23) — OK
-[markets] vix: 19.84000015258789 (2026-07-23) — OK
-[markets] bitcoin: US$ 64789 — OK
+[markets] ibovespa: 175007.671875 (2026-07-24) — OK
+[markets] sp500: 7438.0498046875 (2026-07-24) — OK
+[markets] nasdaq: 25092.478515625 (2026-07-24) — OK
+[markets] dow_jones: 51966.69921875 (2026-07-24) — OK
+[markets] ouro: 4066.0 (2026-07-24) — OK
+[markets] petroleo: 89.91999816894531 (2026-07-24) — OK
+[markets] vix: 18.139999389648438 (2026-07-24) — OK
+[markets] bitcoin: US$ 64060 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.630000114440918
-[telecom.players] American Tower: cotação 166.97500610351562
-[telecom.players] IHS Holding: cotação 8.220000267028809
+[telecom.players] Unifique: cotação 5.559999942779541
+[telecom.players] American Tower: cotação 168.73500061035156
+[telecom.players] IHS Holding: cotação 8.244999885559082
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -49,4 +49,4 @@
 [telecom.ranking] HHI de concentração por estado calculado.
 [telecom.ranking] ameaça Starlink por estado calculada.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 23/07/2026 16:09 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 24/07/2026 15:19 — index.html + css/ + js/ + images/ na raiz do projeto.
