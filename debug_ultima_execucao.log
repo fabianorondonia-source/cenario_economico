@@ -17,13 +17,13 @@
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
 [markets] ibovespa: 174042.0 (2026-07-24) — OK
-[markets] sp500: 7408.2998046875 (2026-07-23) — OK
+[markets] sp500: 7411.97998046875 (2026-07-24) — OK
 [markets] nasdaq: 24975.8203125 (2026-07-24) — OK
 [markets] dow_jones: 51947.25 (2026-07-24) — OK
-[markets] ouro: 4067.60009765625 (2026-07-24) — OK
+[markets] ouro: 4070.800048828125 (2026-07-24) — OK
 [markets] petroleo: 89.30999755859375 (2026-07-24) — OK
 [markets] vix: 18.579999923706055 (2026-07-24) — OK
-[markets] bitcoin: US$ 64138 — OK
+[markets] bitcoin: US$ 64694 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -49,4 +49,4 @@
 [telecom.ranking] HHI de concentração por estado calculado.
 [telecom.ranking] ameaça Starlink por estado calculada.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 25/07/2026 14:47 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 26/07/2026 14:50 — index.html + css/ + js/ + images/ na raiz do projeto.
