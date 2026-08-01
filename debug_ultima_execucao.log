@@ -4,7 +4,7 @@
 [bcb] ipca_mensal: 0.16 (2026-06-01) — OK
 [bcb] igpm_mensal: -1.16 (2026-07-01) — OK
 [bcb] dolar_ptax: 5.0773 (2026-07-31) — OK
-[bcb] euro_ptax: 5.8467 (2026-07-30) — OK
+[bcb] euro_ptax: 5.849 (2026-07-31) — OK
 [bcb] desemprego: 5.4 (2026-06-01) — OK
 [bcb] divida_bruta_pib: 77.5 (2024-11-01) — OK
 [bcb] resultado_primario: 1.64 (2024-11-01) — OK
@@ -16,21 +16,21 @@
 [bcb] ipca_12m: 4.64% — OK
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 177830.625 (2026-07-31) — OK
-[markets] sp500: 7462.18017578125 (2026-07-31) — OK
-[markets] nasdaq: 25226.451171875 (2026-07-31) — OK
-[markets] dow_jones: 52433.58984375 (2026-07-31) — OK
-[markets] ouro: 4101.60009765625 (2026-07-31) — OK
-[markets] petroleo: 84.55000305175781 (2026-07-31) — OK
-[markets] vix: 17.329999923706055 (2026-07-31) — OK
-[markets] bitcoin: US$ 62822 — OK
+[markets] ibovespa: 177999.0 (2026-07-31) — OK
+[markets] sp500: 7489.72021484375 (2026-07-31) — OK
+[markets] nasdaq: 25373.849609375 (2026-07-31) — OK
+[markets] dow_jones: 52485.03125 (2026-07-31) — OK
+[markets] ouro: 4049.10009765625 (2026-07-31) — OK
+[markets] petroleo: 84.66999816894531 (2026-07-31) — OK
+[markets] vix: 15.989999771118164 (2026-07-31) — OK
+[markets] bitcoin: US$ 63035 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.349999904632568
-[telecom.players] American Tower: cotação 171.77000427246094
-[telecom.players] IHS Holding: cotação 8.204999923706055
+[telecom.players] Unifique: cotação 5.380000114440918
+[telecom.players] American Tower: cotação 173.36000061035156
+[telecom.players] IHS Holding: cotação 8.199999809265137
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -49,4 +49,4 @@
 [telecom.ranking] HHI de concentração por estado calculado.
 [telecom.ranking] ameaça Starlink por estado calculada.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 31/07/2026 16:23 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 01/08/2026 14:45 — index.html + css/ + js/ + images/ na raiz do projeto.
