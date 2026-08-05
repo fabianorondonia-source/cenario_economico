@@ -16,21 +16,21 @@
 [bcb] ipca_12m: 4.64% — OK
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 178284.75 (2026-08-04) — OK
-[markets] sp500: 7718.830078125 (2026-08-04) — OK
-[markets] nasdaq: 26464.01171875 (2026-08-04) — OK
-[markets] dow_jones: 54128.48828125 (2026-08-04) — OK
-[markets] ouro: 4143.7998046875 (2026-08-04) — OK
-[markets] petroleo: 75.94000244140625 (2026-08-04) — OK
-[markets] vix: 16.149999618530273 (2026-08-04) — OK
-[markets] bitcoin: US$ 63989 — OK
+[markets] ibovespa: 178438.4375 (2026-08-05) — OK
+[markets] sp500: 7730.52978515625 (2026-08-05) — OK
+[markets] nasdaq: 26447.595703125 (2026-08-05) — OK
+[markets] dow_jones: 54500.16015625 (2026-08-05) — OK
+[markets] ouro: 4294.89990234375 (2026-08-05) — OK
+[markets] petroleo: 75.66000366210938 (2026-08-05) — OK
+[markets] vix: 16.190000534057617 (2026-08-05) — OK
+[markets] bitcoin: US$ 64527 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.309999942779541
-[telecom.players] American Tower: cotação 175.0749969482422
-[telecom.players] IHS Holding: cotação 8.21500015258789
+[telecom.players] Unifique: cotação 5.320000171661377
+[telecom.players] American Tower: cotação 165.9250030517578
+[telecom.players] IHS Holding: cotação 8.164999961853027
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -49,4 +49,4 @@
 [telecom.ranking] HHI de concentração por estado calculado.
 [telecom.ranking] ameaça Starlink por estado calculada.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 04/08/2026 16:35 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 05/08/2026 16:19 — index.html + css/ + js/ + images/ na raiz do projeto.
