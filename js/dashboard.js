@@ -618,20 +618,29 @@ function renderChartEvolucaoRO() {
     graficoVazio('chart-evolucao-ro', 'evolução mensal ainda não foi coletada');
     return;
   }
-  const paletaLinhas = [COR.accent, COR.textoSec, COR.amarelo, COR.verde, COR.vermelho];
+  // Barras agrupadas por mês (não linhas): mais fácil de comparar as 5
+  // operadoras lado a lado em cada período, e evita o problema que a versão
+  // em linha tinha — legenda no topo colidindo/truncando em cima do título
+  // do gráfico. Legenda foi pro rodapé, embaixo do eixo X, sem sobreposição.
+  const paletaBarras = [COR.accent, COR.textoSec, COR.amarelo, COR.verde, COR.vermelho];
   const traces = series.map((s, i) => ({
-    x: periodos, y: s.acessos, type: 'scatter', mode: 'lines+markers',
-    name: s.nome, line: { color: paletaLinhas[i % paletaLinhas.length], width: 2.4 },
-    marker: { size: 6 },
-    hovertemplate: '%{data.name}: %{y:,.0f} acessos<extra></extra>',
+    x: periodos, y: s.acessos, type: 'bar',
+    name: s.nome, marker: { color: paletaBarras[i % paletaBarras.length] },
+    hovertemplate: '%{fullData.name}: %{y:,.0f} acessos<extra></extra>',
   }));
   plotlySeguro('chart-evolucao-ro', traces, {
     ...PLOTLY_DARK,
     title: tituloChart('Rondônia — evolução mensal da base de clientes (top 5 operadoras)'),
+    barmode: 'group',
+    bargap: 0.18,
+    bargroupgap: 0.08,
     xaxis: { ...EIXO, type: 'category' },
     yaxis: { ...EIXO, title: { text: 'acessos', font: { size: 10, color: COR.textoSec } }, separatethousands: true },
-    legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.22 },
-    margin: { t: 60, l: 64, r: 20, b: 34 },
+    // Legenda horizontal ABAIXO do gráfico (y negativo) em vez de acima —
+    // com 5 séries nomeadas ela é larga demais pra caber ao lado do título
+    // sem truncar/sobrepor texto.
+    legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', x: 0, y: -0.22 },
+    margin: { t: 40, l: 64, r: 20, b: 80 },
   }, PLOTLY_CONFIG);
 }
 
