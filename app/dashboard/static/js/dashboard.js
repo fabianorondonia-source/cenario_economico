@@ -34,7 +34,18 @@ function plotlySeguro(elId, data, layout, config) {
     Plotly.newPlot(elId, data, layout, config);
   } catch (e) {
     console.warn(`falha ao desenhar gráfico ${elId}`, e);
+    graficoVazio(elId, 'não foi possível desenhar este gráfico com os dados atuais');
   }
+}
+
+// Em vez de deixar o Plotly desenhar um grid vazio (0-4, -1-6) quando não
+// há pontos suficientes — o que fica parecendo erro/bug — mostra uma
+// mensagem clara. Isso acontece tipicamente quando o painel ainda não
+// rodou nenhuma atualização com internet real (ex.: logo após publicar).
+function graficoVazio(elId, msg) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;text-align:center;color:var(--texto-sec);font-size:.78rem;padding:0 20px;line-height:1.5">Sem dados suficientes ainda —<br>${esc(msg)}.</div>`;
 }
 
 function fmtNum(v, casas = 2) {
@@ -269,10 +280,99 @@ function renderTelecomTabelas() {
       <td class="op">${esc(mv.operacao)}</td>
       <td>${esc(mv.regiao || '—')}</td>
       <td>${esc(mv.obs || '—')}<br><span class="fonte-cel">Fonte: ${esc(mv.fonte || '—')}</span></td>
-    </tr>`).join('') || '<tr><td colspan="4">Sem registros.</td></tr>';
+      <td>${esc(mv.valor_por_assinante || '—')}</td>
+    </tr>`).join('') || '<tr><td colspan="5">Sem registros.</td></tr>';
 
   const riscos = (dados.telecom_setor.telecom_riscos_regulatorios && dados.telecom_setor.telecom_riscos_regulatorios.historico) || [];
   document.getElementById('lista-riscos').innerHTML = riscos.map(r => `<li>${esc(r.risco)}</li>`).join('');
+
+  // Faixa de múltiplos 2026 (calculada por nós sobre negócios reais) — some
+  // essa informação junto do card de riscos regulatórios, como contexto de
+  // referência pra qualquer negociação da Netway.
+  const faixa = (dados.telecom_setor.telecom_faixa_multiplos && dados.telecom_setor.telecom_faixa_multiplos.historico[0]) || null;
+  if (faixa) {
+    const item = document.createElement('li');
+    item.innerHTML = `<strong>Faixa de referência 2026:</strong> ${fmtNum(faixa.ev_ebitda_min,1)}x–${fmtNum(faixa.ev_ebitda_max,1)}x EBITDA · R$ ${fmtNum(faixa.valor_assinante_min,0)}–${fmtNum(faixa.valor_assinante_max,0)}/assinante — ${esc(faixa.fonte)}`;
+    document.getElementById('lista-riscos').appendChild(item);
+  }
+
+  // FUST — resumo estruturado (não é um valor único, é um card informativo).
+  const fust = (dados.telecom_setor.telecom_fust && dados.telecom_setor.telecom_fust.historico[0]) || null;
+  const fustEl = document.getElementById('conteudo-fust');
+  if (fustEl) {
+    if (!fust) {
+      fustEl.innerHTML = '<p class="nota-secao">Sem dados carregados ainda.</p>';
+    } else {
+      fustEl.innerHTML = `
+        <p><strong>2025:</strong> ${esc(fust.orcamento_2025_mobilizado)}</p>
+        <p><strong>2026 → 2027 (projetado):</strong> ${esc(fust.orcamento_2026)} → ${esc(fust.orcamento_2027_projetado)}</p>
+        <p><strong>Janela de decisão:</strong> ${esc(fust.janela_beneficio_fiscal)}</p>
+        <p><strong>Programa Regional (PL 3211/25):</strong> ${esc(fust.programa_regional)}</p>
+        <p class="fonte-cel">${esc(fust.situacao_atual)}</p>
+        <p class="fonte-cel">Fonte: ${esc(dados.telecom_setor.telecom_fust.fonte || '')}</p>
+      `;
+    }
+  }
+}
+
+// ===== Contexto regional (agro) =====
+function renderKpisAgro() {
+  const el = document.getElementById('kpis-agro');
+  if (!el) return;
+  const a = dados.agro_regional || {};
+  const kpiAgro = (titulo, item) => {
+    if (!item) return '';
+    const ctx = (item.historico && item.historico[0] && item.historico[0].contexto) || '';
+    return `
+      <div class="kpi">
+        <div class="t"><span>${esc(titulo)}</span>${tagManual(item)}</div>
+        <div class="v">${fmtNum(item.valor, 2)}<span class="un"> ${esc(item.unidade || '')}</span></div>
+        <div class="fonte">${esc(ctx)}</div>
+        <div class="fonte">${esc(item.fonte || '')}</div>
+      </div>`;
+  };
+  el.innerHTML = [
+    kpiAgro('Soja (saca 60kg)', a.soja_saca),
+    kpiAgro('Boi Gordo (arroba — MT)', a.boi_gordo_arroba_mt),
+  ].join('') || '<p class="nota-secao">Sem dados carregados ainda.</p>';
+}
+
+// ===== HHI de concentração + ameaça Starlink por estado =====
+function renderChartHHI() {
+  const item = dados.telecom_ranking && dados.telecom_ranking.hhi_estados;
+  const lista = (item && item.historico) || [];
+  if (lista.length === 0) {
+    graficoVazio('chart-hhi-estados', 'HHI ainda não foi calculado');
+  } else {
+    const ordenado = [...lista].sort((a, b) => a.hhi_top10 - b.hhi_top10);
+    const nomes = ordenado.map(p => p.uf);
+    const valores = ordenado.map(p => p.hhi_top10);
+    const cores = ordenado.map(p => p.nivel === 'alta concentração' ? COR.vermelho : p.nivel === 'concentração moderada' ? COR.amarelo : COR.verde);
+    plotlySeguro('chart-hhi-estados', [{
+      x: nomes, y: valores, type: 'bar',
+      marker: { color: cores },
+      text: ordenado.map(p => `${fmtNum(p.hhi_top10, 0)} (líder: ${p.lider}, ${fmtNum(p.lider_share, 1)}%)`),
+      textposition: 'outside', textfont: { color: COR.textoSec, size: 10 },
+      cliponaxis: false,
+    }], {
+      ...PLOTLY_DARK,
+      title: tituloChart('HHI de concentração — top 10 por estado'),
+      xaxis: { ...EIXO, type: 'category' },
+      yaxis: { ...EIXO, autorange: false, range: [0, Math.max(...valores) * 1.3] },
+      margin: { t: 34, l: 44, r: 20, b: 34 },
+    }, PLOTLY_CONFIG);
+  }
+
+  const starlinkItem = dados.telecom_ranking && dados.telecom_ranking.ameaca_starlink;
+  const starlinkLista = (starlinkItem && starlinkItem.historico) || [];
+  const corNivel = n => n === 'ameaça alta' ? 'down' : n === 'ameaça moderada' ? '' : 'up';
+  document.querySelector('#tabela-starlink tbody').innerHTML = starlinkLista.map(s => `
+    <tr>
+      <td class="op">${esc(s.uf)}</td>
+      <td>${s.presente ? '#' + s.posicao : '—'}</td>
+      <td>${s.presente ? fmtNum(s.market_share, 1) + '%' : '—'}</td>
+      <td><span class="var ${corNivel(s.nivel)}">${esc(s.nivel)}</span></td>
+    </tr>`).join('') || '<tr><td colspan="4">Sem dados.</td></tr>';
 }
 
 // ===== Gráficos Plotly =====
@@ -288,64 +388,266 @@ function tituloChart(txt) {
 }
 const EIXO = { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.05)', zerolinecolor: 'rgba(255,255,255,0.08)' };
 
+// Bandas de referência pra normalizar o radar macro. Selic (%), IPCA 12m
+// (%) e Desemprego (%) são grandezas pequenas (0-20); Produção Industrial e
+// Vendas no Varejo são ÍNDICES (base 100, variam 85-115) — plotar tudo no
+// mesmo eixo 0-100 fazia os três primeiros sumirem no centro do radar e os
+// dois últimos estourarem o raio. Cada eixo agora vira um "score" 0-100
+// relativo à sua própria banda plausível, só pra desenho — o valor real
+// (com unidade) aparece no hover.
+const BANDAS_RADAR = {
+  'Selic':         { min: 0,  max: 20,  valor: e => e.selic_meta,          unidade: '% a.a.' },
+  'IPCA 12m':      { min: -2, max: 12,  valor: e => e.ipca_12m,            unidade: '%' },
+  'Desemprego':    { min: 3,  max: 15,  valor: e => e.desemprego,          unidade: '%' },
+  'Produção Ind.': { min: 85, max: 115, valor: e => e.producao_industrial, unidade: 'índice' },
+  'Varejo':        { min: 85, max: 115, valor: e => e.vendas_varejo,       unidade: 'índice' },
+};
+
 function renderChartsEconomia() {
   const e = dados.economia;
-  const labels = ['Selic', 'IPCA 12m', 'Desemprego', 'Produção Ind.', 'Varejo'];
-  const valores = [e.selic_meta, e.ipca_12m, e.desemprego, e.producao_industrial, e.vendas_varejo].map(x => (x && x.valor) || 0);
-  plotlySeguro('chart-radar-economia', [{
-    type: 'scatterpolar', r: valores, theta: labels, fill: 'toself',
-    line: { color: COR.accent }, fillcolor: COR.accentSoft
-  }], { ...PLOTLY_DARK, polar: { bgcolor: 'rgba(0,0,0,0)', radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)' }, angularaxis: { color: COR.texto } }, showlegend: false, title: tituloChart('Radar macro') }, PLOTLY_CONFIG);
+  const labels = Object.keys(BANDAS_RADAR);
+  const brutos = labels.map(l => { const b = BANDAS_RADAR[l].valor(e); return b && b.valor; });
+  if (brutos.every(v => v === null || v === undefined)) {
+    graficoVazio('chart-radar-economia', 'nenhum indicador macro foi buscado ainda com internet');
+  } else {
+    const scores = labels.map((l, i) => {
+      const { min, max } = BANDAS_RADAR[l];
+      const v = brutos[i];
+      if (v === null || v === undefined) return 0;
+      return Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100));
+    });
+    const textoHover = labels.map((l, i) => {
+      const v = brutos[i];
+      const txt = v === null || v === undefined ? 'sem dado' : `${fmtNum(v, 1)} ${BANDAS_RADAR[l].unidade}`;
+      return `${l}: ${txt}`;
+    });
+    plotlySeguro('chart-radar-economia', [{
+      type: 'scatterpolar', r: scores, theta: labels, fill: 'toself',
+      line: { color: COR.accent }, fillcolor: COR.accentSoft,
+      text: textoHover, hovertemplate: '%{text}<extra></extra>',
+    }], {
+      ...PLOTLY_DARK,
+      polar: {
+        bgcolor: 'rgba(0,0,0,0)',
+        radialaxis: { color: COR.textoSec, gridcolor: 'rgba(255,255,255,0.06)', range: [0, 100], showticklabels: false },
+        angularaxis: { color: COR.texto },
+      },
+      showlegend: false,
+      title: tituloChart('Radar macro (posição relativa — passe o mouse pro valor real)'),
+    }, PLOTLY_CONFIG);
+  }
 
   const s = serieHistorico(e.ipca_mensal);
-  plotlySeguro('chart-linha-inflacao', [{ x: s.x, y: s.y, type: 'scatter', mode: 'lines', line: { color: COR.amarelo, width: 2 } }],
-    { ...PLOTLY_DARK, title: tituloChart('IPCA mensal (%)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+  if (s.x.length === 0) {
+    graficoVazio('chart-linha-inflacao', 'série do IPCA ainda não foi buscada');
+  } else {
+    plotlySeguro('chart-linha-inflacao', [{ x: s.x, y: s.y, type: 'scatter', mode: 'lines', line: { color: COR.amarelo, width: 2 } }],
+      { ...PLOTLY_DARK, title: tituloChart('IPCA mensal (%)'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
+  }
 }
 
 function renderChartsMercado() {
   const m = dados.mercado;
   const sd = serieHistorico(m.dolar_ptax);
-  plotlySeguro('chart-linha-dolar', [{ x: sd.x, y: sd.y, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: COR.accent, width: 2 }, fillcolor: COR.accentSoft }],
-    { ...PLOTLY_DARK, title: tituloChart('Dólar (USD/BRL)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+  if (sd.x.length === 0) {
+    graficoVazio('chart-linha-dolar', 'cotação do dólar ainda não foi buscada');
+  } else {
+    plotlySeguro('chart-linha-dolar', [{ x: sd.x, y: sd.y, type: 'scatter', mode: 'lines', fill: 'tozeroy', line: { color: COR.accent, width: 2 }, fillcolor: COR.accentSoft }],
+      { ...PLOTLY_DARK, title: tituloChart('Dólar (USD/BRL)'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
+  }
 
   const si = serieHistorico(m.ibovespa);
-  plotlySeguro('chart-linha-ibov', [{ x: si.x, y: si.y, type: 'scatter', mode: 'lines', line: { color: COR.verde, width: 2 } }],
-    { ...PLOTLY_DARK, title: tituloChart('Ibovespa'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+  if (si.x.length === 0) {
+    graficoVazio('chart-linha-ibov', 'série do Ibovespa ainda não foi buscada');
+  } else {
+    plotlySeguro('chart-linha-ibov', [{ x: si.x, y: si.y, type: 'scatter', mode: 'lines', line: { color: COR.verde, width: 2 } }],
+      { ...PLOTLY_DARK, title: tituloChart('Ibovespa'), xaxis: { ...EIXO, type: 'date' }, yaxis: EIXO }, PLOTLY_CONFIG);
+  }
 
-  const chaves = ['dolar_ptax', 'euro_ptax', 'ibovespa', 'sp500', 'nasdaq', 'dow_jones', 'ouro', 'petroleo', 'vix'];
-  const variacoes = chaves.map(k => (m[k] && m[k].variacao_dia) || 0);
-  plotlySeguro('chart-heatmap-mercado', [{
-    z: [variacoes], x: chaves.map(k => k.replace('_', ' ')), y: ['variação (%)'],
-    type: 'heatmap', colorscale: [[0, COR.vermelho], [0.5, '#14161e'], [1, COR.verde]], zmid: 0, showscale: false
-  }], { ...PLOTLY_DARK, title: tituloChart('Variação do dia (%)'), xaxis: EIXO }, PLOTLY_CONFIG);
+  // Rótulos legíveis (a chave crua "dow_jones" virava um "dow jon-" cortado
+  // e girado 45° no eixo — trocado por um bar horizontal com nome completo
+  // e valor escrito, bem mais fácil de ler que a cor de uma célula de heatmap).
+  const NOMES_MERCADO = {
+    dolar_ptax: 'USD/BRL', euro_ptax: 'EUR/BRL', ibovespa: 'Ibovespa', sp500: 'S&P 500',
+    nasdaq: 'Nasdaq', dow_jones: 'Dow Jones', ouro: 'Ouro', petroleo: 'Petróleo (WTI)', vix: 'VIX',
+  };
+  const chaves = Object.keys(NOMES_MERCADO);
+  const variacoesBrutas = chaves.map(k => m[k] && m[k].variacao_dia);
+  if (variacoesBrutas.every(v => v === null || v === undefined)) {
+    graficoVazio('chart-heatmap-mercado', 'nenhuma variação diária disponível ainda');
+  } else {
+    // Maior variação (em módulo) primeiro embaixo por causa da orientação
+    // horizontal do Plotly (desenha de baixo pra cima) — assim a barra mais
+    // extrema fica no topo visualmente.
+    const pares = chaves.map((k, i) => ({ k, v: variacoesBrutas[i] ?? 0 })).sort((a, b) => Math.abs(a.v) - Math.abs(b.v));
+    const nomes = pares.map(p => NOMES_MERCADO[p.k]);
+    const valores = pares.map(p => p.v);
+    const maxAbs = Math.max(...valores.map(v => Math.abs(v)), 0.5);
+    plotlySeguro('chart-heatmap-mercado', [{
+      x: valores, y: nomes, type: 'bar', orientation: 'h',
+      marker: { color: valores.map(v => v >= 0 ? COR.verde : COR.vermelho) },
+      text: valores.map(v => (v >= 0 ? '▲ ' : '▼ ') + fmtNum(Math.abs(v), 2) + '%'),
+      textposition: 'outside', textfont: { color: COR.textoSec, size: 10.5 },
+      cliponaxis: false,
+    }], {
+      ...PLOTLY_DARK,
+      title: tituloChart('Variação do dia (%)'),
+      // autorange:false é obrigatório — sem isso o Plotly ignora silenciosamente
+      // o range explícito e recalcula um autorange bem mais justo aos dados
+      // reais, empurrando o rótulo das barras negativas pra cima do rótulo de
+      // categoria do eixo y (ex.: "Nasd▼0,46%" grudado).
+      xaxis: { ...EIXO, autorange: false, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
+      yaxis: { ...EIXO, type: 'category', automargin: true },
+      margin: { t: 34, l: 90, r: 40, b: 34 },
+    }, PLOTLY_CONFIG);
+  }
 }
 
 function renderChartsTelecom() {
+  // O treemap antigo usava o "valor" de cada grupo como tamanho — mas esse
+  // valor é a COTAÇÃO POR AÇÃO (R$/US$ por papel), não o tamanho da empresa,
+  // e pras de capital fechado nem existe (era preenchido com 10 só pra
+  // aparecer uma caixinha). Resultado: American Tower (ação ~US$163)
+  // engolia o quadro todo, sem dizer nada de real sobre porte relativo.
+  // Troca por um gráfico do que realmente é comparável entre os grupos de
+  // capital aberto: a variação do dia (%) da ação. Os de capital fechado
+  // continuam listados (com tipo/segmento) na tabela "Grandes grupos" logo
+  // abaixo — não têm dado de mercado público pra plotar, e está tudo bem
+  // não inventar um número só pra preencher espaço.
   const grupos = Object.values(dados.telecom_grupos || {});
-  const labels = grupos.map(g => (g.historico && g.historico[0] && g.historico[0].nome) || '?');
-  const parents = labels.map(() => 'Setor');
-  const valores = grupos.map(g => (g.valor && g.valor > 0) ? g.valor : 10);
-  plotlySeguro('chart-treemap-grupos', [{
-    type: 'treemap', labels: ['Setor', ...labels], parents: ['', ...parents], values: [0, ...valores],
-    marker: { colors: ['rgba(0,0,0,0)', ...labels.map((_, i) => `rgba(124,108,240,${0.35 + (i % 4) * 0.14})`)] },
-    textfont: { color: '#fff', size: 11 }
-  }], { ...PLOTLY_DARK, title: tituloChart('Grandes grupos (tamanho ilustrativo)') }, PLOTLY_CONFIG);
+  const abertos = grupos
+    .map(g => ({ nome: (g.historico && g.historico[0] && g.historico[0].nome) || '?', variacao: g.variacao_dia }))
+    .filter(g => g.variacao !== null && g.variacao !== undefined);
+  if (abertos.length === 0) {
+    graficoVazio('chart-treemap-grupos', 'nenhuma cotação dos grupos de capital aberto foi buscada ainda');
+  } else {
+    const ordenado = [...abertos].sort((a, b) => a.variacao - b.variacao);
+    const nomes = ordenado.map(g => g.nome);
+    const valores = ordenado.map(g => g.variacao);
+    const maxAbs = Math.max(...valores.map(v => Math.abs(v)), 0.5);
+    plotlySeguro('chart-treemap-grupos', [{
+      x: valores, y: nomes, type: 'bar', orientation: 'h',
+      marker: { color: valores.map(v => v >= 0 ? COR.verde : COR.vermelho) },
+      text: valores.map(v => (v >= 0 ? '▲ ' : '▼ ') + fmtNum(Math.abs(v), 2) + '%'),
+      textposition: 'outside', textfont: { color: COR.textoSec, size: 10.5 },
+      cliponaxis: false,
+    }], {
+      ...PLOTLY_DARK,
+      title: tituloChart('Ações do setor — variação do dia (%)'),
+      // Mesmo fix de autorange:false do gráfico "Variação do dia" acima —
+      // range sem isso é ignorado pelo Plotly.
+      xaxis: { ...EIXO, autorange: false, range: [-maxAbs * 1.4, maxAbs * 1.4], zeroline: true, zerolinewidth: 1.5 },
+      yaxis: { ...EIXO, type: 'category', automargin: true },
+      margin: { t: 34, l: 110, r: 40, b: 34 },
+    }, PLOTLY_CONFIG);
+  }
 
   const t = dados.telecom_setor;
   if (t.multiplo_ev_ebitda_atual) {
     plotlySeguro('chart-barra-multiplo', [{
       x: ['2021', 'Hoje'], y: [t.multiplo_ev_ebitda_2021.valor, t.multiplo_ev_ebitda_atual.valor],
       type: 'bar', marker: { color: ['rgba(124,108,240,0.35)', COR.accent] }, width: [.5, .5]
-    }], { ...PLOTLY_DARK, title: tituloChart('Múltiplo EV/EBITDA (x)'), xaxis: EIXO, yaxis: EIXO }, PLOTLY_CONFIG);
+    }], { ...PLOTLY_DARK, title: tituloChart('Múltiplo EV/EBITDA (x)'), xaxis: { ...EIXO, type: 'category' }, yaxis: EIXO }, PLOTLY_CONFIG);
   }
+}
+
+// ===== Ranking de provedores (base de clientes) =====
+// Função genérica: serve tanto pro ranking nacional (campo acessos_mil, em
+// milhares) quanto pros estaduais (campo acessos, valor cheio) — só muda a
+// chave do campo numérico, o texto da unidade e o título.
+function renderChartRanking(elId, chave, campoValor, unidadeTxt, titulo) {
+  const item = (dados.telecom_ranking || {})[chave];
+  const lista = (item && item.historico) || [];
+  if (lista.length === 0) {
+    graficoVazio(elId, 'ranking ainda não foi carregado');
+    return;
+  }
+  // Já vem ordenado por base de clientes (maior primeiro); Plotly desenha
+  // barras horizontais de baixo pra cima, então invertemos pra o 1º lugar
+  // aparecer no topo.
+  const ordenado = [...lista].sort((a, b) => b[campoValor] - a[campoValor]).reverse();
+  const nomes = ordenado.map(p => p.nome);
+  const valores = ordenado.map(p => p[campoValor]);
+  const maxValor = Math.max(...valores);
+  const cores = ordenado.map((_, i) => i === ordenado.length - 1 ? COR.accent : `rgba(124,108,240,${0.35 + (i / ordenado.length) * 0.4})`);
+  plotlySeguro(elId, [{
+    x: valores, y: nomes, type: 'bar', orientation: 'h',
+    marker: { color: cores },
+    text: valores.map(v => fmtNum(v, 0) + (unidadeTxt ? ' ' + unidadeTxt : '')), textposition: 'outside',
+    textfont: { color: COR.textoSec, size: 10.5 },
+    // cliponaxis:false evita que o texto do rótulo (fora da barra) seja
+    // cortado pelo clip-path da área de plotagem quando o valor chega perto
+    // do fim do eixo — sem isso, o número do 1º colocado (a maior barra)
+    // aparecia cortado tipo "1.2" em vez de "122.502".
+    cliponaxis: false,
+  }], {
+    ...PLOTLY_DARK,
+    title: tituloChart(titulo),
+    // Range explícito com folga de 22% à direita: dá espaço pro rótulo da
+    // barra mais longa (que encosta no fim do eixo) sem depender só do
+    // cliponaxis, e evita que o Plotly recalcule um range justo demais.
+    xaxis: { ...EIXO, range: [0, maxValor * 1.22], title: { text: unidadeTxt || 'acessos', font: { size: 10, color: COR.textoSec } } },
+    // type:'category' precisa vir explícito — o Plotly (nesta versão) não
+    // detectou sozinho que o eixo y de uma barra horizontal com nomes de
+    // operadora era categórico, e desenhava um eixo numérico vazio (mesmo
+    // bug de fundo que já tínhamos corrigido nos outros gráficos).
+    yaxis: { ...EIXO, type: 'category', automargin: true },
+    margin: { t: 34, l: 140, r: 60, b: 34 },
+  }, PLOTLY_CONFIG);
+}
+
+function renderChartRankingNacional() {
+  renderChartRanking('chart-ranking-nacional', 'ranking_nacional', 'acessos', '', 'Top 10 provedores do Brasil — base de clientes (acessos)');
+  renderChartRanking('chart-ranking-ro', 'ranking_ro', 'acessos', '', 'Top 10 — Rondônia (RO)');
+  renderChartRanking('chart-ranking-mt', 'ranking_mt', 'acessos', '', 'Top 10 — Mato Grosso (MT)');
+  renderChartRanking('chart-ranking-to', 'ranking_to', 'acessos', '', 'Top 10 — Tocantins (TO)');
+  renderChartRanking('chart-ranking-pa', 'ranking_pa', 'acessos', '', 'Top 10 — Pará (PA)');
+  renderChartRanking('chart-ranking-ms', 'ranking_ms', 'acessos', '', 'Top 10 — Mato Grosso do Sul (MS)');
+}
+
+// ===== Evolução mensal de RO (jan-2026 até o mês mais recente) =====
+// Pedido explícito do Fabiano: enxergar o crescimento mês a mês de cada
+// operadora em RO, não só o snapshot do mês mais recente (que é o que os
+// gráficos de barra "Top 10 por estado" acima já mostram).
+function renderChartEvolucaoRO() {
+  const item = dados.telecom_ranking && dados.telecom_ranking.evolucao_ro_mensal;
+  const h = (item && item.historico) || {};
+  const periodos = h.periodos || [];
+  const series = h.series || [];
+  if (periodos.length === 0 || series.length === 0) {
+    graficoVazio('chart-evolucao-ro', 'evolução mensal ainda não foi coletada');
+    return;
+  }
+  const paletaLinhas = [COR.accent, COR.textoSec, COR.amarelo, COR.verde, COR.vermelho];
+  const traces = series.map((s, i) => ({
+    x: periodos, y: s.acessos, type: 'scatter', mode: 'lines+markers',
+    name: s.nome, line: { color: paletaLinhas[i % paletaLinhas.length], width: 2.4 },
+    marker: { size: 6 },
+    hovertemplate: '%{data.name}: %{y:,.0f} acessos<extra></extra>',
+  }));
+  plotlySeguro('chart-evolucao-ro', traces, {
+    ...PLOTLY_DARK,
+    title: tituloChart('Rondônia — evolução mensal da base de clientes (top 5 operadoras)'),
+    xaxis: { ...EIXO, type: 'category' },
+    yaxis: { ...EIXO, title: { text: 'acessos', font: { size: 10, color: COR.textoSec } }, separatethousands: true },
+    legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.22 },
+    margin: { t: 60, l: 64, r: 20, b: 34 },
+  }, PLOTLY_CONFIG);
 }
 
 function renderChartHistoricoScores() {
   const h = dados.historico_scores || [];
+  if (h.length < 2) {
+    // Com 0 ou 1 ponto o Plotly não tem como calcular um range de data
+    // sensato e desenha um eixo degenerado (ex.: milissegundos) — melhor
+    // mostrar uma mensagem clara do que esse eixo quebrado.
+    graficoVazio('chart-historico-scores', 'o histórico começa a aparecer a partir do 2º dia de atualização automática');
+    return;
+  }
   plotlySeguro('chart-historico-scores', [
     { x: h.map(p => p.data), y: h.map(p => p.momento_investimento), type: 'scatter', mode: 'lines+markers', name: 'Momento de Investimento', line: { color: COR.accent, width: 2 }, marker: { size: 5 } },
     { x: h.map(p => p.data), y: h.map(p => p.ma_score), type: 'scatter', mode: 'lines+markers', name: 'M&A Score', line: { color: COR.verde, width: 2 }, marker: { size: 5 } },
-  ], { ...PLOTLY_DARK, legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.15 }, xaxis: EIXO, yaxis: { ...EIXO, range: [0, 100] } }, PLOTLY_CONFIG);
+  ], { ...PLOTLY_DARK, legend: { font: { color: COR.textoSec, size: 10.5 }, orientation: 'h', y: 1.15 }, xaxis: { ...EIXO, type: 'category' }, yaxis: { ...EIXO, range: [0, 100] } }, PLOTLY_CONFIG);
 }
 
 function render() {
@@ -355,7 +657,8 @@ function render() {
   const passos = [
     renderTicker, renderKpis, renderScores, renderInsights, renderAlertas,
     renderTelecomTabelas, renderChartsEconomia, renderChartsMercado,
-    renderChartsTelecom, renderChartHistoricoScores,
+    renderChartsTelecom, renderChartRankingNacional, renderChartEvolucaoRO, renderChartHHI,
+    renderKpisAgro, renderChartHistoricoScores,
   ];
   for (const passo of passos) {
     try { passo(); } catch (e) { console.warn(`falha ao renderizar ${passo.name}`, e); }

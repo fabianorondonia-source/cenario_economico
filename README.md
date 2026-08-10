@@ -41,7 +41,7 @@ app/            → Flask (rotas da API + template + CSS/JS do dashboard)
 services/
   economy/      → Banco Central (SGS): PIB-proxy, IPCA, IGP-M, Selic, desemprego,
                   dívida pública, resultado fiscal, produção industrial, varejo
-  indicators/   → mercado financeiro (stooq.com, CoinGecko) + risco-país/rating (manual)
+  indicators/   → mercado financeiro (Yahoo Finance, CoinGecko) + risco-país/rating (manual)
   telecom/      → setor de ISPs (múltiplos, participação, M&A) + grandes grupos
   scoring/      → Momento de Investimento e M&A Score (regras determinísticas)
   narrative/    → gerador de insights em texto (regras if/then, sem IA generativa)
@@ -59,9 +59,9 @@ Só fontes **gratuitas e sem necessidade de cadastro/chave de API**:
 |---|---|---|
 | Selic, IPCA, IGP-M, desemprego, dívida pública, resultado fiscal, produção industrial, varejo, spread bancário, taxa de crédito, inadimplência | Banco Central (SGS) | Sim |
 | Dólar, Euro | Banco Central (SGS — PTAX) | Sim |
-| Ibovespa, S&P 500, Nasdaq, Dow Jones, ouro, petróleo, VIX | stooq.com | Sim |
+| Ibovespa, S&P 500, Nasdaq, Dow Jones, ouro, petróleo, VIX | Yahoo Finance | Sim |
 | Bitcoin | CoinGecko | Sim |
-| Ações de grupos telecom de capital aberto (Brisanet, Unifique, American Tower, IHS Holding) | stooq.com | Sim |
+| Ações de grupos telecom de capital aberto (Brisanet, Unifique, American Tower, IHS Holding) | Yahoo Finance | Sim |
 | Risco-país (CDS), rating soberano, projeções de PIB/IPCA | Curadoria manual — sem API pública (EMBI+ foi descontinuado em 2024) | Não |
 | Múltiplos de M&A, participação de mercado, churn, movimentações, riscos regulatórios do setor de ISPs | Curadoria manual — sem API pública para dados de M&A do setor | Não |
 | Grupos de capital fechado (Desktop, Vero, Ligga, Mhnet, Brasil Tecpar, Algar, V.tal, Fibrasil, Neutral Networks) | Perfil curado — sem dado público de mercado | Não |

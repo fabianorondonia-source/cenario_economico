@@ -50,10 +50,37 @@ def _http_get_json(url):
         return json.loads(resp.read().decode("utf-8"))
 
 
+def _data_iso(data_br):
+    """BCB devolve datas em DD/MM/YYYY. Convertido pra YYYY-MM-DD (ISO) pra o
+    Plotly no front-end conseguir tratar o eixo como data de verdade —
+    string DD/MM/YYYY ordenada como texto vira zigue-zague errado assim que
+    a série cruza um mês (ex.: "01/02" ordena antes de "15/01")."""
+    try:
+        d, m, a = data_br.split("/")
+        return f"{a}-{m}-{d}"
+    except (ValueError, AttributeError):
+        return data_br
+
+
 def buscar_serie(codigo_sgs, n_dias=MAX_HISTORICO):
-    url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_sgs}/dados/ultimos/{n_dias}?formato=json"
-    serie = _http_get_json(url)
-    return [{"data": p["data"], "valor": float(p["valor"].replace(",", "."))} for p in serie]
+    """Busca os últimos N dias de uma série do SGS. O endpoint 'ultimos/N'
+    do BCB passou a devolver 400 Bad Request para N grande (confirmado em
+    testes: N=120/100/50/30/25 falham, N=20 funciona) — não é falta de
+    internet nem bloqueio, é o próprio parâmetro sendo rejeitado. Em vez de
+    depender de um número mágico que pode mudar de novo, tenta uma escada de
+    janelas menores até uma responder, começando pela pedida."""
+    candidatos = sorted({n_dias, 90, 60, 30, 20, 10}, reverse=True)
+    candidatos = [n for n in candidatos if n <= n_dias] or [10]
+    ultimo_erro = None
+    for n in candidatos:
+        url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_sgs}/dados/ultimos/{n}?formato=json"
+        try:
+            serie = _http_get_json(url)
+            return [{"data": _data_iso(p["data"]), "valor": float(p["valor"].replace(",", "."))} for p in serie]
+        except Exception as e:
+            ultimo_erro = e
+            continue
+    raise ultimo_erro
 
 
 def calcular_ipca_12m():

@@ -16,9 +16,9 @@ from flask import Blueprint, jsonify, request
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
-from services.economy import bcb  # noqa: E402
+from services.economy import bcb, agro  # noqa: E402
 from services.indicators import markets, risk  # noqa: E402
-from services.telecom import sector, players  # noqa: E402
+from services.telecom import sector, players, ranking  # noqa: E402
 from services.scoring import investment_score, ma_score  # noqa: E402
 from services.narrative import generator as narrative_generator  # noqa: E402
 from services.alerts import engine as alerts_engine  # noqa: E402
@@ -45,10 +45,12 @@ def atualizar_tudo():
     print("[atualizar_tudo] iniciando ciclo de atualização...")
     for modulo, nome in [
         (bcb.atualizar_todos, "economia/crédito (BCB)"),
+        (agro.atualizar_todos, "contexto agro regional (manual)"),
         (markets.atualizar_todos, "mercado financeiro"),
         (risk.atualizar_todos, "risco-país/rating (manual)"),
         (sector.atualizar_todos, "setor de provedores (manual)"),
         (players.atualizar_todos, "grandes grupos telecom"),
+        (ranking.atualizar_todos, "ranking de provedores (manual)"),
     ]:
         try:
             modulo()
@@ -86,6 +88,8 @@ def montar_payload():
         "risco": bloco("risco"),
         "telecom_setor": bloco("telecom_setor"),
         "telecom_grupos": bloco("telecom_grupos"),
+        "telecom_ranking": bloco("telecom_ranking"),
+        "agro_regional": bloco("agro_regional"),
         "scores": {"momento_investimento": inv, "ma_score": ma},
         "historico_scores": historico_scores,
         "insights": insights,
