@@ -20,10 +20,10 @@
 [markets] sp500: 7785.759765625 (2026-08-14) — OK
 [markets] nasdaq: 26729.16015625 (2026-08-14) — OK
 [markets] dow_jones: 53732.41015625 (2026-08-14) — OK
-[markets] ouro: 4437.2998046875 (2026-08-14) — OK
-[markets] petroleo: 82.4000015258789 (2026-08-14) — OK
-[markets] vix: 14.25 (2026-08-14) — OK
-[markets] bitcoin: US$ 62933 — OK
+[markets] ouro: 4454.5 (2026-08-17) — OK
+[markets] petroleo: 83.04000091552734 (2026-08-17) — OK
+[markets] vix: 14.970000267028809 (2026-08-17) — OK
+[markets] bitcoin: US$ 63273 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 16/08/2026 10:18 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 17/08/2026 10:27 — index.html + css/ + js/ + images/ na raiz do projeto.
