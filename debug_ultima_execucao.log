@@ -3,13 +3,13 @@
 [bcb] selic_meta: 14.0 (2026-09-16) — OK
 [bcb] ipca_mensal: 0.07 (2026-07-01) — OK
 [bcb] igpm_mensal: -1.16 (2026-07-01) — OK
-[bcb] dolar_ptax: 5.2236 (2026-08-14) — OK
-[bcb] euro_ptax: 6.05 (2026-08-14) — OK
+[bcb] dolar_ptax: 5.2014 (2026-08-17) — OK
+[bcb] euro_ptax: 6.0289 (2026-08-17) — OK
 [bcb] desemprego: 5.4 (2026-06-01) — OK
 [bcb] divida_bruta_pib: 77.5 (2024-11-01) — OK
 [bcb] resultado_primario: 1.64 (2024-11-01) — OK
 [bcb] producao_industrial: 105.6 (2026-06-01) — OK
-[bcb] vendas_varejo: 108.94 (2026-05-01) — OK
+[bcb] vendas_varejo: 105.07 (2026-06-01) — OK
 [bcb] spread_bancario: 21.99 (2026-06-01) — OK
 [bcb] taxa_media_credito: 33.44 (2026-06-01) — OK
 [bcb] inadimplencia: 4.68 (2026-06-01) — OK
@@ -20,15 +20,15 @@
 [markets] sp500: 7785.759765625 (2026-08-14) — OK
 [markets] nasdaq: 26729.16015625 (2026-08-14) — OK
 [markets] dow_jones: 53732.41015625 (2026-08-14) — OK
-[markets] ouro: 4454.5 (2026-08-17) — OK
-[markets] petroleo: 83.04000091552734 (2026-08-17) — OK
-[markets] vix: 14.970000267028809 (2026-08-17) — OK
-[markets] bitcoin: US$ 63273 — OK
+[markets] ouro: 4449.7998046875 (2026-08-18) — OK
+[markets] petroleo: 84.20999908447266 (2026-08-18) — OK
+[markets] vix: 15.920000076293945 (2026-08-18) — OK
+[markets] bitcoin: US$ 64102 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 4.730000019073486
+[telecom.players] Unifique: cotação 4.789999961853027
 [telecom.players] American Tower: cotação 175.5800018310547
 [telecom.players] IHS Holding: cotação 8.329999923706055
 [telecom.players] Desktop: perfil curado (capital fechado)
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 17/08/2026 10:27 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 18/08/2026 10:23 — index.html + css/ + js/ + images/ na raiz do projeto.
