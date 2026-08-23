@@ -20,15 +20,15 @@
 [markets] sp500: 7674.3701171875 (2026-08-21) — OK
 [markets] nasdaq: 26180.4609375 (2026-08-21) — OK
 [markets] dow_jones: 53277.01171875 (2026-08-21) — OK
-[markets] ouro: 4624.10009765625 (2026-08-21) — OK
+[markets] ouro: 4680.60009765625 (2026-08-21) — OK
 [markets] petroleo: 87.05999755859375 (2026-08-21) — OK
 [markets] vix: 15.130000114440918 (2026-08-21) — OK
-[markets] bitcoin: US$ 76775 — OK
+[markets] bitcoin: US$ 76639 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 4.260000228881836
+[telecom.players] Unifique: cotação 4.550000190734863
 [telecom.players] American Tower: cotação 175.8000030517578
 [telecom.players] IHS Holding: cotação 8.399999618530273
 [telecom.players] Desktop: perfil curado (capital fechado)
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 22/08/2026 10:18 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 23/08/2026 10:19 — index.html + css/ + js/ + images/ na raiz do projeto.
