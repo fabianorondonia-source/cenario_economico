@@ -3,8 +3,8 @@
 [bcb] selic_meta: 13.75 (2026-11-04) — OK
 [bcb] ipca_mensal: -0.32 (2026-08-01) — OK
 [bcb] igpm_mensal: -0.22 (2026-08-01) — OK
-[bcb] dolar_ptax: 5.1161 (2026-09-22) — OK
-[bcb] euro_ptax: 5.8487 (2026-09-22) — OK
+[bcb] dolar_ptax: 5.1414 (2026-09-23) — OK
+[bcb] euro_ptax: 5.8576 (2026-09-23) — OK
 [bcb] desemprego: 5.3 (2026-07-01) — OK
 [bcb] divida_bruta_pib: 76.27 (2024-12-01) — OK
 [bcb] resultado_primario: 0.4 (2024-12-01) — OK
@@ -16,21 +16,21 @@
 [bcb] ipca_12m: 4.22% — OK
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 187568.03125 (2026-09-23) — OK
-[markets] sp500: 7722.41015625 (2026-09-23) — OK
-[markets] nasdaq: 26950.625 (2026-09-23) — OK
-[markets] dow_jones: 51764.26171875 (2026-09-23) — OK
-[markets] ouro: 4314.5 (2026-09-23) — OK
-[markets] petroleo: 92.06999969482422 (2026-09-23) — OK
-[markets] vix: 14.760000228881836 (2026-09-23) — OK
-[markets] bitcoin: US$ 84384 — OK
+[markets] ibovespa: 185522.59375 (2026-09-24) — OK
+[markets] sp500: 7689.64990234375 (2026-09-24) — OK
+[markets] nasdaq: 26811.5234375 (2026-09-24) — OK
+[markets] dow_jones: 51335.78125 (2026-09-24) — OK
+[markets] ouro: 4297.2998046875 (2026-09-24) — OK
+[markets] petroleo: 94.62999725341797 (2026-09-24) — OK
+[markets] vix: 15.640000343322754 (2026-09-24) — OK
+[markets] bitcoin: US$ 84739 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.099999904632568
-[telecom.players] American Tower: cotação 175.0449981689453
-[telecom.players] IHS Holding: cotação 8.4350004196167
+[telecom.players] Unifique: cotação 5.059999942779541
+[telecom.players] American Tower: cotação 167.8300018310547
+[telecom.players] IHS Holding: cotação 8.4399995803833
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 23/09/2026 14:38 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 24/09/2026 14:36 — index.html + css/ + js/ + images/ na raiz do projeto.
