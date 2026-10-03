@@ -1,36 +1,36 @@
 [export_estatico] atualizando indicadores antes de exportar...
 [atualizar_tudo] iniciando ciclo de atualização...
-[bcb] selic_meta: 13.75 (2026-11-04) — OK
-[bcb] ipca_mensal: -0.32 (2026-08-01) — OK
-[bcb] igpm_mensal: 1.57 (2026-09-01) — OK
-[bcb] dolar_ptax: 5.2079 (2026-10-01) — OK
-[bcb] euro_ptax: 5.8495 (2026-10-01) — OK
-[bcb] desemprego: 5.3 (2026-08-01) — OK
-[bcb] divida_bruta_pib: 78.95 (2025-11-01) — OK
-[bcb] resultado_primario: 0.39 (2025-01-01) — OK
-[bcb] producao_industrial: 111.7 (2026-07-01) — OK
-[bcb] vendas_varejo: 108.23 (2026-07-01) — OK
-[bcb] spread_bancario: 21.16 (2026-08-01) — OK
-[bcb] taxa_media_credito: 32.26 (2026-08-01) — OK
-[bcb] inadimplencia: 5.04 (2026-08-01) — OK
-[bcb] ipca_12m: 4.22% — OK
+[bcb] selic_meta: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] ipca_mensal: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] igpm_mensal: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] dolar_ptax: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] euro_ptax: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] desemprego: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] divida_bruta_pib: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] resultado_primario: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] producao_industrial: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] vendas_varejo: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] spread_bancario: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] taxa_media_credito: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] inadimplencia: falhou (URLError: <urlopen error [Errno -2] Name or service not known>). Mantendo cache anterior.
+[bcb] ipca_12m: falhou (URLError: <urlopen error [Errno -2] Name or service not known>).
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 187124.328125 (2026-10-02) — OK
-[markets] sp500: 7722.5 (2026-10-02) — OK
-[markets] nasdaq: 27212.306640625 (2026-10-02) — OK
-[markets] dow_jones: 51085.75 (2026-10-02) — OK
-[markets] ouro: 4159.2998046875 (2026-10-02) — OK
-[markets] petroleo: 90.81999969482422 (2026-10-02) — OK
-[markets] vix: 15.609999656677246 (2026-10-02) — OK
-[markets] bitcoin: US$ 85422 — OK
+[markets] ibovespa: 192115.0 (2026-10-02) — OK
+[markets] sp500: 7722.72021484375 (2026-10-02) — OK
+[markets] nasdaq: 27190.859375 (2026-10-02) — OK
+[markets] dow_jones: 51176.9609375 (2026-10-02) — OK
+[markets] ouro: 4162.2998046875 (2026-10-02) — OK
+[markets] petroleo: 91.11000061035156 (2026-10-02) — OK
+[markets] vix: 15.3100004196167 (2026-10-02) — OK
+[markets] bitcoin: US$ 84811 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.199999809265137
-[telecom.players] American Tower: cotação 161.4279022216797
-[telecom.players] IHS Holding: cotação 8.335000038146973
+[telecom.players] Unifique: cotação 5.440000057220459
+[telecom.players] American Tower: cotação 162.1999969482422
+[telecom.players] IHS Holding: cotação 8.319999694824219
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 02/10/2026 16:06 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 03/10/2026 14:31 — index.html + css/ + js/ + images/ na raiz do projeto.
