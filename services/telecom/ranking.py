@@ -57,17 +57,20 @@ RANKING_NACIONAL = [
 
 FONTE_ESTADUAL = f"Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa por UF ({PERIODO_REFERENCIA})"
 
+# RO ATUALIZADO 07/10/2026 para ago-2026 (conferido no painel Anatel). A
+# Anatel corrigiu a base da Uni Telecom: antes aparecia 132 mil (jun) e agora
+# são 75.868 em ago — a Oi volta a ser a 1ª. Os outros estados seguem em jun.
 RANKING_RO = [
-    {"posicao": 1,  "nome": "Uni Telecom",        "acessos": 132227, "market_share": 25.6},
-    {"posicao": 2,  "nome": "Oi",                  "acessos": 78922,  "market_share": 15.3},
-    {"posicao": 3,  "nome": "Claro",               "acessos": 42601,  "market_share": 8.3},
-    {"posicao": 4,  "nome": "Rolim Net",           "acessos": 31087,  "market_share": 6.0},
-    {"posicao": 5,  "nome": "Brasil Digital Telecom", "acessos": 28028, "market_share": 5.4},
-    {"posicao": 6,  "nome": "Speed Travel",        "acessos": 15777,  "market_share": 3.1},
-    {"posicao": 7,  "nome": "Starlink Brazil",     "acessos": 13463,  "market_share": 2.6},
-    {"posicao": 8,  "nome": "Olla Servicos & Internet", "acessos": 12556, "market_share": 2.4},
-    {"posicao": 9,  "nome": "Worldnet Fibra Optica", "acessos": 11790, "market_share": 2.3},
-    {"posicao": 10, "nome": "Net Way Informatica", "acessos": 10901,  "market_share": 2.1},
+    {"posicao": 1,  "nome": "Oi",                  "acessos": 78678,  "market_share": 16.5},
+    {"posicao": 2,  "nome": "Uni Telecom",        "acessos": 75868,  "market_share": 15.9},
+    {"posicao": 3,  "nome": "Claro",               "acessos": 43110,  "market_share": 9.0},
+    {"posicao": 4,  "nome": "Rolim Net",           "acessos": 36500,  "market_share": 7.6},
+    {"posicao": 5,  "nome": "Brasil Digital Telecom", "acessos": 29327, "market_share": 6.1},
+    {"posicao": 6,  "nome": "Speed Travel",        "acessos": 16085,  "market_share": 3.4},
+    {"posicao": 7,  "nome": "Starlink Brazil",     "acessos": 14959,  "market_share": 3.1},
+    {"posicao": 8,  "nome": "Worldnet Fibra Optica", "acessos": 12249, "market_share": 2.6},
+    {"posicao": 9,  "nome": "Globofiber",          "acessos": 11151,  "market_share": 2.3},
+    {"posicao": 10, "nome": "Net Way Informatica", "acessos": 11068,  "market_share": 2.3},
 ]
 
 RANKING_MT = [
@@ -136,21 +139,24 @@ RANKINGS_ESTADUAIS = {
 # de cada operadora ao longo do ano, não só o snapshot do mês mais recente.
 # Coletado navegando o mesmo painel Anatel, trocando o filtro "Período" mês a
 # mês (RO fixo). Cobre as 5 operadoras mais relevantes do top 10 pra manter o
-# gráfico de linhas legível — a mudança mais importante que aparece aqui é a
-# Uni Telecom saindo de 2º lugar (62 mil, jan) pra 1º isolado (132 mil, jun),
-# ultrapassando a Oi em março e mais que dobrando de base em 6 meses,
-# enquanto a Oi ficou praticamente estável/levemente em queda.
+# gráfico legível. ATENÇÃO: os valores antigos da Uni Telecom (62 mil → 132 mil)
+# foram invalidados pela revisão da Anatel — ver nota abaixo.
 EVOLUCAO_RO_MENSAL = {
-    "periodos": ["jan-2026", "fev-2026", "mar-2026", "abr-2026", "mai-2026", "jun-2026"],
+    # ATENÇÃO (07/10/2026): a Anatel revisou a base da Uni Telecom em RO
+    # (ago-2026 = 75.868; antes mostrava 122-132 mil em abr-jun). Os pontos
+    # antigos da Uni (jan-jun) ficaram como None até serem reconferidos no
+    # painel; os das demais operadoras também podem ter sofrido revisão e
+    # precisam ser reconferidos. Só ago-2026 foi lido de novo.
+    "periodos": ["jan-2026", "fev-2026", "mar-2026", "abr-2026", "mai-2026", "jun-2026", "ago-2026"],
     "series": [
-        {"nome": "Uni Telecom",            "acessos": [62196, 58368, 87486, 122502, 122502, 132227]},
-        {"nome": "Oi",                      "acessos": [81088, 80581, 80071, 80378, 79602, 78922]},
-        {"nome": "Claro",                   "acessos": [40412, 40950, 41421, 41801, 42108, 42601]},
-        {"nome": "Rolim Net",               "acessos": [27235, 28246, 29019, 29308, 31087, 31087]},
-        {"nome": "Brasil Digital Telecom",  "acessos": [30601, 25416, 29476, 29368, 27783, 28028]},
+        {"nome": "Uni Telecom",            "acessos": [None, None, None, None, None, None, 75868]},
+        {"nome": "Oi",                      "acessos": [81088, 80581, 80071, 80378, 79602, 78922, 78678]},
+        {"nome": "Claro",                   "acessos": [40412, 40950, 41421, 41801, 42108, 42601, 43110]},
+        {"nome": "Rolim Net",               "acessos": [27235, 28246, 29019, 29308, 31087, 31087, 36500]},
+        {"nome": "Brasil Digital Telecom",  "acessos": [30601, 25416, 29476, 29368, 27783, 28028, 29327]},
     ],
 }
-FONTE_EVOLUCAO_RO = "Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa RO, coletado mês a mês (jan-2026 a jun-2026, alterando o filtro Período)"
+FONTE_EVOLUCAO_RO = "Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa RO, jan-jun/2026 coletados antes da revisão da Anatel (Uni Telecom pendente de reconferência); ago-2026 conferido em 07/10/2026"
 
 
 def _classificar_hhi(hhi):
@@ -172,8 +178,7 @@ def calcular_hhi_por_uf():
     muito bem pra COMPARAR concentração relativa entre os 5 estados de
     atuação da Netway, que é o uso pretendido aqui: menor HHI = mercado
     mais fragmentado (mais alvos de roll-up, nenhum dono claro); maior HHI
-    = já existe um líder consolidado (RO, por causa da Uni Telecom com 24%
-    sozinha) — devir a due diligence prioritária pra ESSE ativo específico,
+    = já existe um líder consolidado (RO, onde Oi e Uni Telecom somam ~32%) — devir a due diligence prioritária pra ESSE ativo específico,
     não pro mercado como um todo.
     """
     resultado = []
