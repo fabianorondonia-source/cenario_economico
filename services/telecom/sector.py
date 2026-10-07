@@ -24,19 +24,23 @@ SETOR = {
     "participacao_isps_banda_larga": {"valor": 56, "unidade": "% do mercado de banda larga fixa", "fonte": "Anatel, via Inforchannel (26/06/2026)"},
     "crescimento_assinantes_2018_2025": {"valor": 72, "unidade": "% acumulado (31,2mi → 53,8mi)", "fonte": "Anatel, via Baguete (13/02/2026)"},
     "crescimento_assinantes_2024_2025": {"valor": 2.5, "unidade": "% no período (52,54mi → 53,88mi)", "fonte": "Anatel, via TELETIME (02/02/2026)"},
+    "base_banda_larga_brasil_ago2026": {"valor": 57.89, "unidade": "mi de acessos (+5,7% em 12 meses; Anatel pode revisar)", "fonte": "Anatel, via TELETIME (05/10/2026)"},
+    "acessos_informais_estimados": {"valor": 14, "unidade": "mi de acessos/mês não reportados à Anatel (estimativa)", "fonte": "Associação Neo, via TELETIME (06/10/2026)"},
     "churn_setorial_min": {"valor": 20, "unidade": "% ao ano", "fonte": "Análises de mercado, via Baguete (13/02/2026)"},
     "churn_setorial_max": {"valor": 25, "unidade": "% ao ano", "fonte": "Análises de mercado, via Baguete (13/02/2026)"},
 }
 
 LEITURA_MOMENTO = (
-    "2026 confirma o ponto de inflexão: crescimento orgânico de assinantes esgotado (+2,5% ao ano) "
-    "coexiste agora com um mercado de M&A visivelmente reaquecido — a Claro pagou 6,2x EBITDA pela "
-    "Desktop (mar/2026, EV R$4bi), acima da faixa de 4,5-5,0x em que o ativo vinha negociando, e a "
-    "controladora América Móvil confirmou publicamente (22/07/2026) que segue caçando mais ativos com "
-    "o mesmo perfil (fibra, clientes que complementem a rede). Ou seja: o desconto dos múltiplos de "
-    "2021-2025 não significa mais 'ativo barato parado na prateleira' — grandes compradores estão "
-    "pagando prêmio por escala e qualidade de base. Por outro lado, o churn setorial de 20-25% ao ano "
-    "mostra que isso vale para ativos organizados; base desorganizada continua descontada."
+    "Out/2026: a Claro fechou a compra da Desktop (01/10, ~6,2x EBITDA, EV R$4bi) — a primeira vez que "
+    "uma grande tele compra um dos grandes ISPs — e a Alares concluiu a Oquei (~5,3x). Mas o mercado "
+    "está dividido: na Futurecom (06/10), analistas disseram que o baixo retorno dos provedores adia a "
+    "consolidação ('poucos acima de 200-300 mil assinantes ainda têm capacidade de alavancagem') e que o "
+    "cenário só muda a partir de 2029; a Associação Neo estima ~14 milhões de acessos informais fora da "
+    "Anatel e aponta a reforma tributária (IVA de referência 27,91%) como fator de risco e, ao mesmo "
+    "tempo, catalisador de vendas. Em ago/2026 a Starlink liderou as adições (+65 mil, 936,8 mil no "
+    "total) e provedores regionais cresceram pouco ou perderam base. Leitura: compradores grandes "
+    "pagam prêmio por escala e base organizada, e a pressão sobre ISPs médios endividados tende a "
+    "criar vendedores — bom para quem tem caixa e disciplina de diligência."
 )
 
 MOVIMENTACOES_RECENTES = [
@@ -45,8 +49,10 @@ MOVIMENTACOES_RECENTES = [
     # precificar na prática, além do múltiplo de EBITDA (que nem sempre é
     # auditado/confiável em empresas pequenas). Guardado como campo separado
     # pra virar comparável ao longo do tempo conforme mais negócios entrarem.
-    {"periodo": "mar/2026", "operacao": "Claro (América Móvil) compra 73% da Desktop", "regiao": "Interior de São Paulo", "obs": "EV R$ 4,0bi incl. dívida (~6,2x EBITDA 2025); Anatel já aprovou, falta Cade para fechar em 2026", "valor_por_assinante": "≈ R$ 3.333/assinante (EV R$4,0bi ÷ 1,2mi clientes)", "fonte": "TELETIME (22-23/03/2026)"},
-    {"periodo": "jun/2026", "operacao": "Alares compra Oquei Telecom", "regiao": "Interior de São Paulo", "obs": "R$ 189mi (R$75,6mi à vista + 10 parcelas semestrais); Oquei: receita R$89,2mi, EBITDA R$35,5mi → ~5,3x EBITDA", "valor_por_assinante": "≈ R$ 2.779/assinante (R$189mi ÷ 68 mil clientes)", "fonte": "TELETIME (18/06/2026)"},
+    {"periodo": "out/2026", "operacao": "Claro conclui a compra da Desktop (72,83% do capital) e assume o controle", "regiao": "Interior de São Paulo", "obs": "Fechado em 01/10/2026 (negócio de R$ 4bi, ~6,2x EBITDA). CEO da Claro vira presidente da Desktop; Claro protocolou oferta pública unificada para fechar o capital. Soma 12,07mi de assinantes e passa a liderar banda larga em SP (5,8mi). Primeira vez que uma grande tele compra um dos grandes ISPs.", "valor_por_assinante": "≈ R$ 3.333/assinante (EV R$4,0bi ÷ 1,2mi clientes)", "fonte": "TELETIME (01/10 e 05/10/2026)"},
+    {"periodo": "out/2026", "operacao": "Alares conclui a compra da Oquei Telecom", "regiao": "Noroeste de São Paulo", "obs": "R$ 189mi (R$75,6mi à vista + 10 parcelas semestrais); Oquei: receita R$89,2mi, EBITDA R$35,5mi → ~5,3x EBITDA. Alares perdeu ~4 mil clientes em ago/2026 (base 798 mil).", "valor_por_assinante": "≈ R$ 2.779/assinante (R$189mi ÷ 68 mil clientes)", "fonte": "TELETIME (18/06 e 01/10/2026)"},
+    {"periodo": "2026 (em andamento)", "operacao": "Brasil TecPar compra ativos da Ligga (354 mil assinantes)", "regiao": "Paraná", "obs": "R$ 495mi pelos ativos (R$ ~120mi à vista, resto em debêntures conversíveis) + assunção de ~R$ 1bi em debêntures da Ligga; depende de Cade, Anatel e debenturistas. TecPar vai emitir mais R$ 300mi em debêntures (28/09/2026).", "valor_por_assinante": "≈ R$ 1.397/assinante só sobre o valor pago (R$495mi ÷ 354 mil), sem contar a dívida assumida", "fonte": "Baguete/TELETIME (fev-mar e 28/09/2026)"},
+    {"periodo": "out/2026", "operacao": "Unifique: controladores apresentam proposta de fechamento de capital", "regiao": "Santa Catarina", "obs": "Proposta divulgada em 05/10/2026 (detalhes de preço não conferidos). Base de 892 mil assinantes de banda larga em ago/2026.", "fonte": "TELETIME (05/10/2026)"},
     {"periodo": "jul/2026", "operacao": "América Móvil sinaliza apetite por mais aquisições de fibra", "regiao": "—", "obs": "CEO Daniel Hajj, em call de resultados: 'buscamos empresas de perfil como a Desktop, que agreguem clientes de fibra e complementem a rede'", "fonte": "TELETIME (22/07/2026)"},
     {"periodo": "2025", "operacao": "Brasil Tecpar completa 5 incorporações", "regiao": "—", "obs": "receita R$ 587,3 mi; EBITDA ajustado R$ 857 mi (+68% vs 2024)", "fonte": "TELETIME (06/03/2026)"},
     {"periodo": "2025", "operacao": "Grupo dono da Sky compra a operadora Proxxima", "regiao": "—", "fonte": "Baguete"},
@@ -80,6 +86,7 @@ RISCOS_REGULATORIOS = [
     "Fim da dispensa automática de outorga (Res. 777/2025, RGO art. 13): provedores que operavam sem outorga formal (até 5 mil assinantes) agora precisam regularizar a autorização junto à Anatel sob risco de multa/paralização — checar isso na due diligence de qualquer ISP-alvo de aquisição.",
     "Novo PGMC (Plano Geral de Metas de Competição) enfraquece as ORPAs (Ofertas de Referência Pública de Atacado): Abrint e TelComp alertam para risco de concentração de mercado e cláusulas mais duras das grandes operadoras nas negociações de atacado com provedores regionais.",
     "Compartilhamento de postes segue em disputa: Decreto 12.068/2024 em revisão pela Anatel desde dez/2025, e o PL 3.220/2019 (novo marco de preço/regras) tramitando — aprovado na CCJ do Senado em abr/2026, ainda em análise na Câmara.",
+    "Reforma tributária: com a alíquota de referência do IVA estimada em 27,91%, a carga sobre o setor deve subir e muitos provedores não estão preparados para aplicar o cashback previsto; a Anatel vê o split payment como possível catalisador de consolidação (Futurecom, 06/10/2026). Também pesa na diligência: informalidade (~14 mi de acessos fora da Anatel) e relatos de cidades com ~50% da banda larga sob influência de facções.",
     "Fiscalização mais dura sobre retenção de logs (Marco Civil da Internet): decisões recentes do STJ reforçam a obrigação de guardar IP + porta lógica + timestamp por 1 ano — provedor sem CGNAT/IPv6 auditado corre risco de responder por identificação que falhou.",
 ]
 
@@ -96,11 +103,11 @@ def atualizar_todos():
     )
     db.upsert_indicador(
         chave="telecom_movimentacoes", categoria="telecom_setor", valor=None, unidade="lista",
-        fonte="TELETIME/Baguete (atualizado 22/07/2026)", atualizacao="manual", historico=MOVIMENTACOES_RECENTES
+        fonte="TELETIME/Baguete (atualizado 07/10/2026)", atualizacao="manual", historico=MOVIMENTACOES_RECENTES
     )
     db.upsert_indicador(
         chave="telecom_riscos_regulatorios", categoria="telecom_setor", valor=None, unidade="lista",
-        fonte="Anatel/SCM Engenharia/Abrint/TelComp (atualizado 22/07/2026)", atualizacao="manual",
+        fonte="Anatel/Abrint/TelComp/Associação Neo (atualizado 07/10/2026)", atualizacao="manual",
         historico=[{"risco": r} for r in RISCOS_REGULATORIOS]
     )
     db.upsert_indicador(

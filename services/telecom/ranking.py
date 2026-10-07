@@ -29,22 +29,29 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 from database import db  # noqa: E402
 
 PERIODO_REFERENCIA = "jun-2026"
-FONTE_NACIONAL = f"Anatel — Painel de Acessos (informacoes.anatel.gov.br/paineis/acessos/ranking), Banda Larga Fixa Brasil ({PERIODO_REFERENCIA})"
+FONTE_NACIONAL = "Anatel — Painel de Acessos, Banda Larga Fixa Brasil (ago-2026), via TELETIME (05/10/2026)"
 
 # Ordenado pela base de clientes (acessos). Mesma fonte/período dos rankings
 # estaduais abaixo (substituiu uma curadoria anterior via TeleSíntese/dez-2025,
 # que era menos atual e de fonte diferente).
+#
+# ATUALIZADO 07/10/2026: ranking nacional agora é de ago-2026 (Anatel, via
+# TELETIME 05/10/2026 — os números são arredondados em mil/milhão por lá).
+# Atenção: "Oi" aparece como "Nio" (Oi Fibra) nessa fonte. A Starlink (936,8
+# mil) já ultrapassou TIM e Unifique mas fica fora do top 10 por pouco.
+# Os rankings ESTADUAIS abaixo continuam em jun-2026 (ver PERIODO_REFERENCIA).
+PERIODO_NACIONAL = "ago-2026"
 RANKING_NACIONAL = [
-    {"posicao": 1,  "nome": "Claro",            "acessos": 10805062, "market_share": 19.1},
-    {"posicao": 2,  "nome": "Vivo",              "acessos": 8409356,  "market_share": 14.9},
-    {"posicao": 3,  "nome": "Oi",                "acessos": 3434931,  "market_share": 6.1},
-    {"posicao": 4,  "nome": "Brisanet",          "acessos": 1579840,  "market_share": 2.8},
-    {"posicao": 5,  "nome": "Brasil Tecpar",     "acessos": 1372924,  "market_share": 2.4},
-    {"posicao": 6,  "nome": "Giga Mais Fibra",   "acessos": 1313370,  "market_share": 2.3},
-    {"posicao": 7,  "nome": "Vero",              "acessos": 1305248,  "market_share": 2.3},
-    {"posicao": 8,  "nome": "Desktop",           "acessos": 1199770,  "market_share": 2.1},
-    {"posicao": 9,  "nome": "TIM",               "acessos": 906476,   "market_share": 1.6},
-    {"posicao": 10, "nome": "Unifique",          "acessos": 885395,   "market_share": 1.6},
+    {"posicao": 1,  "nome": "Claro",            "acessos": 10870000, "market_share": 18.8},
+    {"posicao": 2,  "nome": "Vivo",              "acessos": 8540000,  "market_share": 14.8},
+    {"posicao": 3,  "nome": "Nio (Oi Fibra)",    "acessos": 3290000,  "market_share": 5.7},
+    {"posicao": 4,  "nome": "Brisanet",          "acessos": 1580000,  "market_share": 2.7},
+    {"posicao": 5,  "nome": "Brasil Tecpar",     "acessos": 1380000,  "market_share": 2.4},
+    {"posicao": 6,  "nome": "Vero",              "acessos": 1290000,  "market_share": 2.2},
+    {"posicao": 7,  "nome": "Giga Mais Fibra",   "acessos": 1280000,  "market_share": 2.2},
+    {"posicao": 8,  "nome": "Desktop",           "acessos": 1190000,  "market_share": 2.1},
+    {"posicao": 9,  "nome": "Starlink",          "acessos": 936800,   "market_share": 1.6},
+    {"posicao": 10, "nome": "TIM",               "acessos": 929800,   "market_share": 1.6},
 ]
 
 
