@@ -7,7 +7,7 @@
 [bcb] euro_ptax: 5.5844 (2026-10-09) — OK
 [bcb] desemprego: 5.3 (2026-08-01) — OK
 [bcb] divida_bruta_pib: 75.48 (2025-01-01) — OK
-[bcb] resultado_primario: 0.39 (2025-01-01) — OK
+[bcb] resultado_primario: 0.36 (2025-11-01) — OK
 [bcb] producao_industrial: 111.7 (2026-08-01) — OK
 [bcb] vendas_varejo: 108.23 (2026-07-01) — OK
 [bcb] spread_bancario: 21.16 (2026-08-01) — OK
@@ -23,7 +23,7 @@
 [markets] ouro: 4216.2998046875 (2026-10-09) — OK
 [markets] petroleo: 91.8499984741211 (2026-10-09) — OK
 [markets] vix: 14.84000015258789 (2026-10-09) — OK
-[markets] bitcoin: US$ 82954 — OK
+[markets] bitcoin: US$ 83740 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 10/10/2026 15:41 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 11/10/2026 16:07 — index.html + css/ + js/ + images/ na raiz do projeto.
