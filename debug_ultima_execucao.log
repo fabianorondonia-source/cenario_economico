@@ -1,19 +1,19 @@
 [export_estatico] atualizando indicadores antes de exportar...
 [atualizar_tudo] iniciando ciclo de atualização...
-[bcb] selic_meta: 13.75 (2026-11-04) — OK
-[bcb] ipca_mensal: 0.82 (2026-09-01) — OK
-[bcb] igpm_mensal: 1.57 (2026-09-01) — OK
-[bcb] dolar_ptax: 5.0826 (2026-10-16) — OK
-[bcb] euro_ptax: 5.7088 (2026-10-16) — OK
-[bcb] desemprego: 5.3 (2026-08-01) — OK
-[bcb] divida_bruta_pib: 75.48 (2025-01-01) — OK
-[bcb] resultado_primario: 0.39 (2025-01-01) — OK
-[bcb] producao_industrial: 111.7 (2026-08-01) — OK
-[bcb] vendas_varejo: 107.63 (2026-08-01) — OK
-[bcb] spread_bancario: 21.16 (2026-08-01) — OK
-[bcb] taxa_media_credito: 32.26 (2026-08-01) — OK
-[bcb] inadimplencia: 5.04 (2026-08-01) — OK
-[bcb] ipca_12m: 4.58% — OK
+[bcb] selic_meta: falhou (JSONDecodeError: Expecting value: line 1 column 1 (char 0)). Mantendo cache anterior.
+[bcb] ipca_mensal: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] igpm_mensal: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] dolar_ptax: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] euro_ptax: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] desemprego: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] divida_bruta_pib: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] resultado_primario: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] producao_industrial: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] vendas_varejo: falhou (JSONDecodeError: Expecting value: line 1 column 1 (char 0)). Mantendo cache anterior.
+[bcb] spread_bancario: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] taxa_media_credito: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] inadimplencia: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
+[bcb] ipca_12m: falhou (TypeError: string indices must be integers, not 'str').
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
 [markets] ibovespa: 205430.0 (2026-10-16) — OK
@@ -21,9 +21,9 @@
 [markets] nasdaq: 26140.029296875 (2026-10-16) — OK
 [markets] dow_jones: 52002.41015625 (2026-10-16) — OK
 [markets] ouro: 4181.10009765625 (2026-10-16) — OK
-[markets] petroleo: 101.41000366210938 (2026-10-16) — OK
+[markets] petroleo: 99.0199966430664 (2026-10-16) — OK
 [markets] vix: 19.989999771118164 (2026-10-16) — OK
-[markets] bitcoin: US$ 81411 — OK
+[markets] bitcoin: US$ 81448 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 17/10/2026 13:25 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 18/10/2026 13:55 — index.html + css/ + js/ + images/ na raiz do projeto.
