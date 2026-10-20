@@ -7,29 +7,28 @@
 [bcb] euro_ptax: 5.6682 (2026-10-19) — OK
 [bcb] desemprego: 5.3 (2026-08-01) — OK
 [bcb] divida_bruta_pib: 75.48 (2025-01-01) — OK
-[bcb] resultado_primario: 0.39 (2025-01-01) — OK
+[bcb] resultado_primario: 0.36 (2025-11-01) — OK
 [bcb] producao_industrial: 111.7 (2026-08-01) — OK
-[bcb] vendas_varejo: 107.63 (2026-08-01) — OK
+[bcb] vendas_varejo: falhou (TimeoutError: The read operation timed out). Mantendo cache anterior.
 [bcb] spread_bancario: 21.16 (2026-08-01) — OK
 [bcb] taxa_media_credito: 32.26 (2026-08-01) — OK
 [bcb] inadimplencia: 5.04 (2026-08-01) — OK
-[bcb] ipca_12m: 4.58% — OK
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 204514.296875 (2026-10-19) — OK
-[markets] sp500: 7707.10986328125 (2026-10-19) — OK
-[markets] nasdaq: 26511.8359375 (2026-10-19) — OK
-[markets] dow_jones: 52015.87890625 (2026-10-19) — OK
-[markets] ouro: 4160.89990234375 (2026-10-19) — OK
-[markets] petroleo: 98.62000274658203 (2026-10-19) — OK
-[markets] vix: 18.079999923706055 (2026-10-19) — OK
-[markets] bitcoin: US$ 81958 — OK
+[markets] ibovespa: 207435.703125 (2026-10-20) — OK
+[markets] sp500: 7736.06982421875 (2026-10-20) — OK
+[markets] nasdaq: 26552.908203125 (2026-10-20) — OK
+[markets] dow_jones: 52548.73046875 (2026-10-20) — OK
+[markets] ouro: 4171.39990234375 (2026-10-20) — OK
+[markets] petroleo: 95.83999633789062 (2026-10-20) — OK
+[markets] vix: 17.700000762939453 (2026-10-20) — OK
+[markets] bitcoin: US$ 83093 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 6.210000038146973
-[telecom.players] American Tower: cotação 181.9600067138672
+[telecom.players] Unifique: cotação 6.269999980926514
+[telecom.players] American Tower: cotação 184.0399932861328
 [telecom.players] IHS Holding: cotação 8.425000190734863
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
@@ -50,4 +49,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 19/10/2026 16:46 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 20/10/2026 14:39 — index.html + css/ + js/ + images/ na raiz do projeto.
