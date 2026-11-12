@@ -1,35 +1,36 @@
 [export_estatico] atualizando indicadores antes de exportar...
 [atualizar_tudo] iniciando ciclo de atualização...
 [bcb] selic_meta: 13.75 (2026-12-09) — OK
-[bcb] ipca_mensal: 0.82 (2026-09-01) — OK
+[bcb] ipca_mensal: 0.14 (2026-10-01) — OK
 [bcb] igpm_mensal: 1.47 (2026-10-01) — OK
-[bcb] dolar_ptax: 5.5606 (2026-11-11) — OK
-[bcb] euro_ptax: 6.1706 (2026-11-11) — OK
+[bcb] dolar_ptax: 5.6143 (2026-11-12) — OK
+[bcb] euro_ptax: 6.2133 (2026-11-12) — OK
 [bcb] desemprego: 5.2 (2026-09-01) — OK
-[bcb] divida_bruta_pib: 78.64 (2025-12-01) — OK
+[bcb] divida_bruta_pib: 75.78 (2025-02-01) — OK
 [bcb] resultado_primario: 0.13 (2025-02-01) — OK
 [bcb] producao_industrial: 109.1 (2026-09-01) — OK
 [bcb] vendas_varejo: 107.63 (2026-08-01) — OK
 [bcb] spread_bancario: 21.61 (2026-09-01) — OK
 [bcb] taxa_media_credito: 32.36 (2026-09-01) — OK
 [bcb] inadimplencia: 4.98 (2026-09-01) — OK
+[bcb] ipca_12m: 4.63% — OK
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
-[markets] ibovespa: 172408.046875 (2026-11-11) — OK
-[markets] sp500: 7634.10986328125 (2026-11-11) — OK
-[markets] nasdaq: 25618.568359375 (2026-11-11) — OK
-[markets] dow_jones: 52370.8984375 (2026-11-11) — OK
-[markets] ouro: 4010.39990234375 (2026-11-11) — OK
-[markets] petroleo: 86.94999694824219 (2026-11-11) — OK
-[markets] vix: 17.700000762939453 (2026-11-11) — OK
-[markets] bitcoin: US$ 74449 — OK
+[markets] ibovespa: 171133.0 (2026-11-12) — OK
+[markets] sp500: 7640.56005859375 (2026-11-12) — OK
+[markets] nasdaq: 25525.828125 (2026-11-12) — OK
+[markets] dow_jones: 52694.69921875 (2026-11-12) — OK
+[markets] ouro: 3879.5 (2026-11-12) — OK
+[markets] petroleo: 87.4800033569336 (2026-11-12) — OK
+[markets] vix: 17.549999237060547 (2026-11-12) — OK
+[markets] bitcoin: US$ 71765 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
-[telecom.players] Unifique: cotação 5.590000152587891
-[telecom.players] American Tower: cotação 189.41000366210938
-[telecom.players] IHS Holding: cotação 8.46500015258789
+[telecom.players] Unifique: cotação 5.579999923706055
+[telecom.players] American Tower: cotação 190.18499755859375
+[telecom.players] IHS Holding: cotação 8.460000038146973
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -49,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 11/11/2026 17:39 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 12/11/2026 17:52 — index.html + css/ + js/ + images/ na raiz do projeto.
