@@ -23,7 +23,7 @@
 [markets] ouro: 3886.300048828125 (2026-11-13) — OK
 [markets] petroleo: 88.55999755859375 (2026-11-13) — OK
 [markets] vix: 19.299999237060547 (2026-11-13) — OK
-[markets] bitcoin: US$ 65389 — OK
+[markets] bitcoin: US$ 64518 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 14/11/2026 16:19 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 15/11/2026 16:45 — index.html + css/ + js/ + images/ na raiz do projeto.
