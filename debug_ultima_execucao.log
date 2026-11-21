@@ -17,20 +17,20 @@
 [economy.agro] soja_saca: 144.17 R$/saca (60kg)
 [economy.agro] boi_gordo_arroba_mt: 311.52 R$/arroba (Mato Grosso)
 [markets] ibovespa: 166376.0 (2026-11-19) — OK
-[markets] sp500: 7009.64990234375 (2026-11-20) — OK
-[markets] nasdaq: 22974.625 (2026-11-20) — OK
-[markets] dow_jones: 48703.23828125 (2026-11-20) — OK
-[markets] ouro: 3530.10009765625 (2026-11-20) — OK
-[markets] petroleo: 82.55999755859375 (2026-11-20) — OK
-[markets] vix: 31.93000030517578 (2026-11-20) — OK
-[markets] bitcoin: US$ 58829 — OK
+[markets] sp500: 6910.39013671875 (2026-11-20) — OK
+[markets] nasdaq: 22617.73046875 (2026-11-20) — OK
+[markets] dow_jones: 48147.328125 (2026-11-20) — OK
+[markets] ouro: 3515.39990234375 (2026-11-20) — OK
+[markets] petroleo: 83.9800033569336 (2026-11-20) — OK
+[markets] vix: 35.88999938964844 (2026-11-20) — OK
+[markets] bitcoin: US$ 60102 — OK
 [risk] indicadores manuais (risco-país, rating, projeções) carregados no cache.
 [telecom.sector] dados do setor de provedores carregados no cache.
 [markets] nenhum símbolo respondeu (['BRIT3.SA']) — último erro: HTTPError: HTTP Error 404: Not Found
 [telecom.players] Brisanet: perfil curado (capital fechado)
 [telecom.players] Unifique: cotação 5.730000019073486
-[telecom.players] American Tower: cotação 185.50999450683594
-[telecom.players] IHS Holding: cotação 8.4350004196167
+[telecom.players] American Tower: cotação 184.2100067138672
+[telecom.players] IHS Holding: cotação 8.4399995803833
 [telecom.players] Desktop: perfil curado (capital fechado)
 [telecom.players] Vero: perfil curado (capital fechado)
 [telecom.players] Ligga: perfil curado (capital fechado)
@@ -50,4 +50,4 @@
 [telecom.ranking] ameaça Starlink por estado calculada.
 [telecom.ranking] evolução mensal de RO (jan-jun/2026) carregada no cache.
 [atualizar_tudo] ciclo concluído. 0 alerta(s) ativo(s).
-[export_estatico] snapshot gerado em 20/11/2026 18:14 — index.html + css/ + js/ + images/ na raiz do projeto.
+[export_estatico] snapshot gerado em 21/11/2026 17:04 — index.html + css/ + js/ + images/ na raiz do projeto.
